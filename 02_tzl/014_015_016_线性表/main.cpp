@@ -6,7 +6,7 @@ using namespace DTLib;
 
 int main(int argc, char **argv)
 {
-	//SeqList<int> *s;
+	SeqList<int> *s;
 	
 	
 	return 0;
