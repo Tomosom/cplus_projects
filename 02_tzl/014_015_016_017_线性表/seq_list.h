@@ -8,7 +8,7 @@ namespace DTLib {
 	
 template <typename T>
 class SeqList : public List<T> {
-#if 0
+
 protected:
 	T *m_array;		// 顺序存储空间
 	int m_length;	// 当前现行变长度
@@ -32,7 +32,7 @@ public:
 	
 	bool remove(int i)
 	{
-		bool ret = ((0 <= i) && (i <= m_length));
+		bool ret = ((0 <= i) && (i < m_length));
 		if (ret) {
 			for(int p = i; p < m_length-1; p++) {
 				m_array[p] = m_array[p+1];
@@ -44,7 +44,7 @@ public:
 	
 	bool set(int i, const T &e)
 	{
-		bool ret = ((0 <= i) && (i <= m_length));
+		bool ret = ((0 <= i) && (i < m_length));
 		if (ret) {
 			m_array[i] = e;
 		}
@@ -53,7 +53,7 @@ public:
 	
 	bool get(int i, T &e) const
 	{
-		bool ret = ((0 < =i) && (i <= m_length));
+		bool ret = ((0 <= i) && (i < m_length));
 		if (ret) {
 			e = m_array[i];
 		}
@@ -72,7 +72,7 @@ public:
 	// 顺序存储线性表的数组访问方式
 	T &operator[](int i)
 	{
-		if ((0 <= i) && (i <= m_length)) {
+		if ((0 <= i) && (i < m_length)) {
 			return m_array[i];
 		} else {
 			THROW_EXCEPTION(IndexOutOfBoundsException, "Parameter i is invalid ...");
@@ -80,12 +80,12 @@ public:
 	}
 	T operator[](int i) const
 	{
-		return (cons_cast<SeqList<T>&>(*this))[i]; // 复用上面的非const []
+		return (const_cast<SeqList<T>&>(*this))[i]; // 复用上面的非const []
 	}
 	
 	// 顺序存储空间的容量
 	virtual int capacity() const = 0;
-#endif
+
 };
 	
 
