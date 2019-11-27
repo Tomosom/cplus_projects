@@ -1,14 +1,19 @@
 #include <iostream>
 #include "static_list.h"
-
+#include "dynamic_list.h"
 using namespace std;
 using namespace DTLib;
 
+#define DYNAMICLIST 0
+
 int main(int argc, char **argv)
 {
-	//SeqList<int> *s;
+#if DYNAMICLIST
+	DynamicList<int> l(5);
+#else
 	StaticList<int, 5> l;
-	
+#endif
+
 	for (int i = 0; i < l.capacity(); i++) {
 		l.insert(0, i);
 	}
@@ -28,8 +33,28 @@ int main(int argc, char **argv)
 	catch(const Exception &e) {
 		cout << e.message() << endl;
 		cout << e.location() << endl;
+#if DYNAMICLIST
+		l.resize(10);
+		l.insert(5, 30);
+		
+		for (int i = 0; i < l.length(); i++) {
+			cout << l[i] << endl;
+		}	
+#endif
 	}
+#if DYNAMICLIST
+	l[5] = 5;
+	
+	for (int i = 0; i < l.length(); i++) {
+		cout << l[i] << endl;
+	}		
 
+	l.resize(3);
+
+	for (int i = 0; i < l.length(); i++) {
+		cout << l[i] << endl;
+	}
+#endif
 	return 0;
 	
 }
