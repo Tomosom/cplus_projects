@@ -30,6 +30,11 @@ public:
 		return ret;
 	}
 	
+	bool insert(const T &e)
+	{
+		return insert(m_length, e);
+	}
+	
 	bool remove(int i)
 	{
 		bool ret = ((0 <= i) && (i < m_length));

@@ -4,18 +4,24 @@
 using namespace std;
 using namespace DTLib;
 
-#define DYNAMICLIST 0
+#define DYNAMICLIST 1
 
 int main(int argc, char **argv)
 {
 #if DYNAMICLIST
 	DynamicList<int> l(5);
+	// DynamicList<int> n(5);
+	// n = l;
+
 #else
 	StaticList<int, 5> l;
+	// StaticList<int, 5> n;
+	// n = l;
+
 #endif
 
 	for (int i = 0; i < l.capacity(); i++) {
-		l.insert(0, i);
+		l.insert(0, i); // l.insert(i);
 	}
 	
 	for (int i = 0; i < l.length(); i++) {
