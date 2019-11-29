@@ -7,7 +7,7 @@
 using namespace std;
 using namespace DTLib;
 
-#define DYNAMICLIST 1
+#define DYNAMICARRAY 1
 
 int main(int argc, char **argv)
 {
