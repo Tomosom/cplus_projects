@@ -6,10 +6,8 @@
 namespace DTLib {
 
 template <typename T, int N>
-class StaticArray : public Array {
+class StaticArray : public Array<T> {
 
-//class StaticArray {
-#if 0
 protected:
     T m_space[N];
 
@@ -29,14 +27,14 @@ public:
 
     StaticArray<T, N> &operator=(const StaticArray<T, N> &obj)
     {
-        if (this != &obj) {
+        if (this != &obj) { // 防止自赋值
             for (int i = 0; i < N; i++) {
                 m_space[i] = obj.m_space[i];
             }
         }
         return *this;
     }
-#endif
+
     int length() const
     {
         return N;

@@ -20,7 +20,7 @@ public:
 
         return ret;
     }
-    virtual bool get(int i, const T &e) const {
+    virtual bool get(int i, T &e) const {
         bool ret = ((0 <= i) && (i < length()));
         if (ret) {
             e = m_array[i];
