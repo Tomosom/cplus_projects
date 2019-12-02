@@ -18,6 +18,7 @@ TARGET = a.out
 
 $(TARGET):$(SRC)
 	$(CC) $(CFLAGS) -o $@ $^
+	#$(CC) $(CFLAGS) -o $@ $^ -g
 
 .PHONY:clean
 clean:

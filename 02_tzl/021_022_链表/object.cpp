@@ -7,36 +7,29 @@ namespace DTLib{
 
 void *Object::operator new(size_t size) throw() /* 表明当前的重载函数不会跑出任何异常 */
 {
-	cout << "Object::operator new : " << size << endl;
-	
-	
-	
-	//cout<< "ffff" << endl;
-	
-	//return NULL;
+	//cout << "Object::operator new : " << size << endl;
 	return malloc(size);
 }
 
 void Object::operator delete(void *p)
 {
-	cout << "Object::operator delete : " << p << endl;
+	//cout << "Object::operator delete : " << p << endl;
 	free(p);
 }
-
 
 void *Object::operator new[](size_t size) throw()
 {
 	return malloc(size);
-	
+
 }
 void Object::operator delete[](void *p)
 {
 	free(p);
-	
+
 }
 Object::~Object()
 {
-	
+
 }
 
 
