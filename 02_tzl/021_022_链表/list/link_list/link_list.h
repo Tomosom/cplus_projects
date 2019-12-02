@@ -91,6 +91,7 @@ public:
             //std::cout << std::endl;
             return ret;
         } else {
+            //std::cout << std::endl;
             THROW_EXCEPTION(IndexOutOfBoundsException, "Incalid parameter i to get element...");
         }
         return ret;
