@@ -1,8 +1,11 @@
 #include <iostream>
-#include "exception.h"
+#include <cstring>
+#include <cstdlib>
+#include <cstdio>
+
 using namespace std;
 
-
+#define THROW_EXCEPTION(e, m) (throw e(m, __FILE__, __LINE__))
 
 template <typename T>
 class LinkList {
@@ -23,13 +26,12 @@ public:
         m_length = 0;
     }
 
-
-	bool insert(const T &e)
+    bool insert(const T &e)
     {
         return insert(m_length, e);
     }
 
-	bool insert(int i, const T &e)
+    bool insert(int i, const T &e)
     {
         bool ret = ((0 <= i) && (i <= m_length));
         if (ret) {
@@ -45,12 +47,11 @@ public:
                 current->next = node;
 
                 m_length++;
-            } else {
-                THROW_EXCEPTION(NoEnoughMemoryException, "No memory to insert new element");
             }
         }
+        return ret;
     }
-	bool remove(int i)
+    bool remove(int i)
     {
         bool ret = ((0 <= i) && (i < m_length));
         if (ret) {
@@ -68,29 +69,7 @@ public:
         return ret;
     }
 
-
-    T get(int i) const
-    {
-#if 1
-        T ret;
-        if (get(i, ret)) {
-            //std::cout << std::endl;
-            //printf("\n");
-            //get(i, ret);
-            return ret;
-        } else {
-            //throw "hello girl";
-            //std::cout << "else" << std::endl;
-            throw IndexOutOfBoundsException("Invalid parameter i to get element...", __FILE__, __LINE__);
-        }
-#else
-        T ret;
-        get(i, ret);
-        return ret;
-#endif
-    }
-
-	bool get(int i, T &e) const
+    bool get(int i, T &e) const
     {
         bool ret = ((0 <= i) && (i < m_length));
         if (ret) {
@@ -103,7 +82,7 @@ public:
         }
         return ret;
     }
-	int length() const
+    int length() const
     {
         return m_length;
     }
@@ -120,7 +99,7 @@ public:
 
 };
 
-int main(int argc, char **argv)
+int main()
 {
     LinkList<int> list;
     for(int i = 0; i < 5; i++) {
@@ -130,15 +109,11 @@ int main(int argc, char **argv)
     cout << "length " << list.length() << endl;
 
     for(int i = 0; i < list.length(); i++) {
-/*
         int v = 0;
         list.get(i, v);
         cout << v << endl;
-        */
-        //cout << " : " << i << endl;
-        cout << "main : " << list.get(i) << endl;
-        //list.get(i);
     }
-	return 0;
+    return 0;
 
 }
+
