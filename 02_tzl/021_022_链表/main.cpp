@@ -15,14 +15,7 @@ int main(int argc, char **argv)
     cout << "length " << list.length() << endl;
 
     for(int i = 0; i < list.length(); i++) {
-/*
-        int v = 0;
-        list.get(i, v);
-        cout << v << endl;
-        */
-        //cout << " : " << i << endl;
         cout << "main : " << list.get(i) << endl;
-        //list.get(i);
     }
 	return 0;
 

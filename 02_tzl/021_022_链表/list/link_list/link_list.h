@@ -88,10 +88,8 @@ public:
     {
         T ret;
         if (get(i, ret)) {
-            //std::cout << std::endl;
             return ret;
         } else {
-            //std::cout << std::endl;
             THROW_EXCEPTION(IndexOutOfBoundsException, "Incalid parameter i to get element...");
         }
         return ret;
@@ -102,7 +100,7 @@ public:
         bool ret = ((0 <= i) && (i < m_length));
         if (ret) {
             Node *current = &m_header;
-            for(int p; p < i; p++) {
+            for(int p = 0; p < i; p++) {
                 current = current->next;
             }
 
