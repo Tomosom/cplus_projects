@@ -15,8 +15,23 @@ protected:
         Node *next;
     };
 
-    mutable Node m_header;
+    //mutable Node m_header;
+    //dt way 避免泛型类型T构造函数的调用
+    mutable struct : public Object { // 也必须继承object，不然内存结构不一致
+        char reserved[sizeof(T)];
+        Node *next;
+    } m_header;
+
     int m_length;
+
+    Node *position(int i) const
+    {
+        Node *ret = reinterpret_cast<Node *>(&m_header);
+        for(int p = 0; p < i; p++) {
+            ret = ret->next;
+        }
+        return ret;
+    }
 
 public:
     LinkList()
@@ -37,10 +52,7 @@ public:
         if (ret) {
             Node *node = new Node();
             if(node != NULL) {
-                Node *current = &m_header;
-                for(int p = 0; p < i; p++) {
-                    current = current->next;
-                }
+                Node *current = position(i);
 
                 node->value = e;
                 node->next = current->next;
@@ -56,10 +68,7 @@ public:
     {
         bool ret = ((0 <= i) && (i < m_length));
         if (ret) {
-            Node *current = &m_header;
-            for(int p; p < i; p++) {
-                current = current->next;
-            }
+            Node *current = position(i);
 
             Node *toDel = current->next;
             current->next = toDel->next;
@@ -73,11 +82,7 @@ public:
     {
         bool ret = ((0 <= i) && (i < m_length));
         if (ret) {
-            Node *current = &m_header;
-            for(int p; p < i; p++) {
-                current = current->next;
-            }
-
+            Node *current = position(i);
             current->next->value = e;
         }
         return ret;
@@ -99,11 +104,7 @@ public:
     {
         bool ret = ((0 <= i) && (i < m_length));
         if (ret) {
-            Node *current = &m_header;
-            for(int p = 0; p < i; p++) {
-                current = current->next;
-            }
-
+            Node *current = position(i);
             e = current->next->value ;
         }
         return ret;
