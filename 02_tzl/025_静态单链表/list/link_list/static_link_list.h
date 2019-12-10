@@ -20,7 +20,7 @@ protected:
         }
     };
 
-    unsigned char m_space[sizeof(SNode) *N];
+    unsigned char m_space[sizeof(SNode) * N];
     int m_used[N];
 
     Node *create()
@@ -44,7 +44,7 @@ protected:
         SNode *space = reinterpret_cast<SNode*>(m_space);
         SNode *psn = dynamic_cast<SNode*>(pn);
 
-        std::cout << "StaticLinkList::destroy()" << std::endl;
+        std::cout << "StaticLinkList::destroy()" << pn << std::endl;
 
         for (int i = 0; i < N; i++) {
             if (pn == (space + i)) {

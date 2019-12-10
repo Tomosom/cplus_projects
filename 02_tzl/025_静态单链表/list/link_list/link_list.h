@@ -155,18 +155,16 @@ public:
 
 	void clear()
     {
-        std::cout << "LinkList::clear()" << std::endl;
+        std::cout << "LinkList::clear()" << m_header.next << std::endl;
         while(m_header.next) { // 若已经调用子类static link list的析构函数，则不会调用此循环
             Node *toDel = m_header.next;
 
             m_header.next = toDel->next;
-
             m_length--;
-
             destroy(toDel);
 
         }
-//        m_length = 0;
+        /* m_length = 0; // 改为上面m_length-- */
     }
 
     // 将游标定位到目标位置
