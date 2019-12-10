@@ -42,7 +42,8 @@ protected:
 
     virtual void destroy(Node *pn)
     {
-        delete pn;
+        std::cout << "LinkList::destroy()" << std::endl;
+        delete pn; // 静态单链表中最终会析构栈中的空间，error
     }
 
 public:
@@ -83,11 +84,16 @@ public:
         bool ret = ((0 <= i) && (i < m_length));
         if (ret) {
             Node *current = position(i);
-
             Node *toDel = current->next;
+
+            if (m_current == toDel) {
+                m_current = toDel->next;
+            }
+
             current->next = toDel->next;
-            destroy(toDel);
             m_length--;
+            destroy(toDel);
+
         }
 
         return ret;
@@ -149,15 +155,18 @@ public:
 
 	void clear()
     {
-        while(m_header.next) {
+        std::cout << "LinkList::clear()" << std::endl;
+        while(m_header.next) { // 若已经调用子类static link list的析构函数，则不会调用此循环
             Node *toDel = m_header.next;
 
             m_header.next = toDel->next;
 
-            delete toDel;
+            m_length--;
+
+            destroy(toDel);
 
         }
-        m_length = 0;
+//        m_length = 0;
     }
 
     // 将游标定位到目标位置
@@ -203,6 +212,7 @@ public:
 
     ~LinkList()
     {
+        std::cout << "~LinkList()" << std::endl;
         clear();
     }
 
