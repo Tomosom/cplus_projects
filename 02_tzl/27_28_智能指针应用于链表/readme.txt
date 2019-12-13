@@ -11,5 +11,7 @@
 使用当前类型创建二维数组
 ── main_v1.5.temp
 更新smartpointer之后，使SmartPointer继承自Pointer, 对智能指针的测试
+── main_v1.6.temp
+sharedpoint测试，多个智能指针可以合法地指向同一片堆空间
 ── main.cpp
 
