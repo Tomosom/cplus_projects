@@ -1,3 +1,4 @@
 **/a.out
 .gitignore
 **/out/
+**/.vscode/

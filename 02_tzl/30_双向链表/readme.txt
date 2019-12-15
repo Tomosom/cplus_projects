@@ -15,5 +15,7 @@
 sharedpoint测试，多个智能指针可以合法地指向同一片堆空间
 ── main_v1.7.temp
 循环链表解决约瑟夫环问题
+── main_v1.7.temp
+针对dual_link_list.h中双向链表的测试
 ── main.cpp
 
