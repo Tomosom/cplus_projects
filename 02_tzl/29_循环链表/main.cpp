@@ -13,28 +13,24 @@ using namespace DTLib;
 void josephus(int n, int s, int m)
 {
     CircleList<int> c;
-
-    for(int i = 1; i <= n; i++) {
+    int i = 0;
+    for(i = 1; i <= n; i++) {
         c.insert(i);
     }
 
-//    for (c.move(0); !c.end(); c.next()) {
-//        cout << c.current() << endl;
-//    }
-
-    //c.move(0);
+    for (c.move(0), i = 0; i < c.length(); c.next(), i++) { // 单向循环链表的遍历方法
+        cout << c.current() << endl;
+    }
 
     cout << "--------" << endl;
 
     c.move(s-1, m-1);
-#if 1
 
     while (c.length() > 0) {
         c.next();
         cout << c.current() << endl;
         c.remove(c.find(c.current()));
     }
-#endif
 
 }
 

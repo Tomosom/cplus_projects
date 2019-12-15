@@ -132,8 +132,8 @@ public:
     // 右边是否达到尾部(是否为空)
     bool end()
     {
-        return (this->m_length == 0) || (this->m_current == NULL);
-        //return (this->m_length == 0) || (this->m_current == this->m_header.next);
+        return (this->m_length == 0) || (this->m_current == NULL); // 循环链表永远不会end
+        //return (this->m_length == 0) || (this->m_current->next == this->m_header.next);
     }
     ~CircleList()
     {
