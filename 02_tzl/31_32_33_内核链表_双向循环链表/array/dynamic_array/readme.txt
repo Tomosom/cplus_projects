@@ -6,5 +6,5 @@
 ── dynamic_array.h
 
 
-── main_v1.4.temp
+── main.c
 使用当前类型创建二维数组
