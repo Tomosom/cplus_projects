@@ -43,6 +43,6 @@ int main(int argc, char **argv)
     }
     cout << "int find : " << list.find(2) << endl;
 
-	return 0;
+    return 0;
 
 }
