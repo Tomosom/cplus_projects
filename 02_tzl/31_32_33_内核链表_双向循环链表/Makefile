@@ -7,9 +7,9 @@ CC := g++
 #SRC = $(foreach dir, $(DIRS), $(wildcard $(dir)/*.cpp))
 ##SRC = $(wildcard *.cpp)
 
-SRC := ./main.cpp
-SRC += ./object.cpp
-SRC += ./exception/exception.cpp
+SRC += ./main.cpp
+#SRC += ./object.cpp
+#SRC += ./exception/exception.cpp
 
 #OBJ = $(patsubst %.cpp, %.o, $(SRC))
 OBJ = $(SRC:%.cpp=%.o)

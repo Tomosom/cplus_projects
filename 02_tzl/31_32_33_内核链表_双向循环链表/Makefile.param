@@ -20,3 +20,6 @@ CFLAGS += -I$(PWD)/list/link_list/circle_list/
 CFLAGS += -I$(PWD)/list/dual_link_list
 CFLAGS += -I$(PWD)/list/kernel_list
 
+
+SRC := ./object.cpp
+SRC += ./exception/exception.cpp
