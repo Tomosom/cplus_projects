@@ -1,5 +1,13 @@
 **/a.out
+a.out
+
 .gitignore
+
 **/out/
+out/
+
 **/.vscode/
+.vscode/
+
 **/*.o
+*.o

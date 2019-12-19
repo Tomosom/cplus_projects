@@ -1,0 +1,22 @@
+CFLAGS := -I$(PWD)
+
+CFLAGS += -I$(PWD)/pointer/
+CFLAGS += -I$(PWD)/pointer/smart_pointer/
+CFLAGS += -I$(PWD)/pointer/shared_pointer/
+
+CFLAGS += -I$(PWD)/exception/
+
+CFLAGS += -I$(PWD)/array/
+CFLAGS += -I$(PWD)/array/dynamic_array/
+CFLAGS += -I$(PWD)/array/static_array/
+
+CFLAGS += -I$(PWD)/list/
+CFLAGS += -I$(PWD)/list/seq_list/
+CFLAGS += -I$(PWD)/list/seq_list/dynamic_list/
+CFLAGS += -I$(PWD)/list/seq_list/static_list/
+CFLAGS += -I$(PWD)/list/link_list/
+CFLAGS += -I$(PWD)/list/link_list/static_link_list/
+CFLAGS += -I$(PWD)/list/link_list/circle_list/
+CFLAGS += -I$(PWD)/list/dual_link_list
+CFLAGS += -I$(PWD)/list/kernel_list
+
