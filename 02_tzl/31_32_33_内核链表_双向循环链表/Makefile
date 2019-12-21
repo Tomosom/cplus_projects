@@ -1,3 +1,4 @@
+PARAM_FILE := ./Makefile.param
 include Makefile.param
 
 CC := g++

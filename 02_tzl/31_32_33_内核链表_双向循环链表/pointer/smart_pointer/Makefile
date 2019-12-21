@@ -1,11 +1,9 @@
-include ../../Makefile.param
+PARAM_FILE := ../../Makefile.param
+include $(PARAM_FILE)
 
 CC := g++
 
 SRC += ./main.cpp
-
-all:
-	echo $(SRC)
 
 OBJ = $(SRC:%.cpp=%.o)
 
