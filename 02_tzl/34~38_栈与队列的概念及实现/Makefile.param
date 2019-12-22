@@ -23,6 +23,10 @@ CFLAGS += -I$(PARAM_DIR)/list/dual_link_list/
 CFLAGS += -I$(PARAM_DIR)/list/dual_link_list/dual_circle_list/
 CFLAGS += -I$(PARAM_DIR)/list/kernel_list
 
+CFLAGS += -I$(PARAM_DIR)/stack/
+CFLAGS += -I$(PARAM_DIR)/stack/static_stack/
+CFLAGS += -I$(PARAM_DIR)/stack/link_stack/
+
 
 SRC := $(PARAM_DIR)/object.cpp
 SRC += $(PARAM_DIR)/exception/exception.cpp
