@@ -14,18 +14,18 @@ protected:
     int m_size;     // 当前栈的大小
 
 public:
-    StaticStack()
+    StaticStack() // O(1)
     {
         m_top = -1;
         m_size = 0;
     }
 
-    int capacity() const
+    int capacity() const // O(1)
     {
         return N;
     }
 
-    void push(const T &e)
+    void push(const T &e) // O(1)
     {
         if (m_size < N)
         {
@@ -37,7 +37,7 @@ public:
         }
     }
 
-    void pop()
+    void pop() // O(1)
     {
         if(m_size > 0) {
             m_top--;
@@ -47,7 +47,7 @@ public:
         }
     }
 
-    T top() const
+    T top() const // O(1)
     {
         if(m_size > 0) {
             return m_space[m_top];
@@ -56,13 +56,13 @@ public:
         }
     }
 
-    void clear()
+    void clear() // O(1)
     {
         m_top = -1;
         m_size = 0;
     }
 
-    int size() const
+    int size() const // O(1)
     {
         return m_size;
     }

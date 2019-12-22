@@ -13,12 +13,12 @@ protected:
     LinkList <T> m_list;
 
 public:
-    void push(const T &e)
+    void push(const T &e) // O(1)
     {
         m_list.insert(0, e);
     }
 
-    void pop()
+    void pop() // O(1)
     {
         if (m_list.length() > 0) {
             m_list.remove(0);
@@ -27,7 +27,7 @@ public:
         }
     }
 
-    T top() const
+    T top() const// O(1)
     {
         if(m_list.length() > 0) {
             return m_list.get(0);
@@ -36,20 +36,17 @@ public:
         }
     }
 
-    void clear()
+    void clear()// O(n)
     {
         m_list.clear();
     }
 
-    int size() const
+    int size() const// O(1)
     {
         return m_list.length();
     }
     
 };
-
-
-
 
 }
 
