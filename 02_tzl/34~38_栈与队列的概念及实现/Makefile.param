@@ -27,6 +27,10 @@ CFLAGS += -I$(PARAM_DIR)/stack/
 CFLAGS += -I$(PARAM_DIR)/stack/static_stack/
 CFLAGS += -I$(PARAM_DIR)/stack/link_stack/
 
+CFLAGS += -I$(PARAM_DIR)/queue/
+CFLAGS += -I$(PARAM_DIR)/queue/static_queue/
+CFLAGS += -I$(PARAM_DIR)/queue/link_queue/
+
 
 SRC := $(PARAM_DIR)/object.cpp
 SRC += $(PARAM_DIR)/exception/exception.cpp
