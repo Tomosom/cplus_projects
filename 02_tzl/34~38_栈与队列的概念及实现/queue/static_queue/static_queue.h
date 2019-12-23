@@ -27,7 +27,7 @@ public:
         return N;
     }
 
-    void add(const T &e)
+    void add(const T &e) // O(1)
     {
         if (m_length < N) {
             m_space[m_rear] = e;
@@ -38,7 +38,7 @@ public:
         }
     }
 
-    void remove()
+    void remove() // O(1)
     {
         if (m_length > 0) {
             m_front = (m_front + 1) % N;
@@ -48,7 +48,7 @@ public:
         }
     }
 
-    T front() const
+    T front() const // O(1)
     {
         if (m_length > 0) {
             return m_space[m_front];
@@ -57,14 +57,14 @@ public:
         }
     }
 
-    void clear()
+    void clear() // O(1)
     {
         m_front = 0;
         m_rear = 0;
         m_length = 0;
     }
 
-    int length() const
+    int length() const // O(1)
     {
         return m_length;
     }

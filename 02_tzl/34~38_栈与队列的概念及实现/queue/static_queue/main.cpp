@@ -4,6 +4,8 @@
 using namespace std;
 using namespace DTLib;
 
+// 类似的，当数据元素为类类型时，StaticQueue的对象在创建时，会多次调用元素类型的构造函数，影响效率
+// 所以需要实现链式队列
 
 int main(int argc, char **argv)
 {
