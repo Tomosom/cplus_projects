@@ -23,13 +23,13 @@ CFLAGS += -I$(PARAM_DIR)/list/dual_link_list/
 CFLAGS += -I$(PARAM_DIR)/list/dual_link_list/dual_circle_list/
 CFLAGS += -I$(PARAM_DIR)/list/kernel_list
 
-CFLAGS += -I$(PARAM_DIR)/stack/
-CFLAGS += -I$(PARAM_DIR)/stack/static_stack/
-CFLAGS += -I$(PARAM_DIR)/stack/link_stack/
+CFLAGS += -I$(PARAM_DIR)/stack_and_queue/stack/
+CFLAGS += -I$(PARAM_DIR)/stack_and_queue/stack/static_stack/
+CFLAGS += -I$(PARAM_DIR)/stack_and_queue/stack/link_stack/
 
-CFLAGS += -I$(PARAM_DIR)/queue/
-CFLAGS += -I$(PARAM_DIR)/queue/static_queue/
-CFLAGS += -I$(PARAM_DIR)/queue/link_queue/
+CFLAGS += -I$(PARAM_DIR)/stack_and_queue/queue/
+CFLAGS += -I$(PARAM_DIR)/stack_and_queue/queue/static_queue/
+CFLAGS += -I$(PARAM_DIR)/stack_and_queue/queue/link_queue/
 
 
 SRC := $(PARAM_DIR)/object.cpp

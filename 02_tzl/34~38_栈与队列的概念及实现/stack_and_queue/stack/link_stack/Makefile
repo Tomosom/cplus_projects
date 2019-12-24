@@ -1,4 +1,4 @@
-PARAM_FILE := ../../Makefile.param
+PARAM_FILE := ../../../Makefile.param
 include $(PARAM_FILE)
 
 CC := g++
