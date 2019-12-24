@@ -8,7 +8,7 @@ t213249544
 SSH
 git clone git@github.com:Tomosom/cplus_projects.git
 HTTPS
-https://github.com/Tomosom/cplus_projects.git
+git clone https://github.com/Tomosom/cplus_projects.git
 
 
 from net:
