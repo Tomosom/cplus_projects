@@ -11,7 +11,7 @@ protected:
     int m_length;
 
     void init(const char *s);
-
+    bool equal(const char *l, const char *r, int len) const;
 public:
     TString();
     TString(const char *s);
@@ -19,6 +19,17 @@ public:
     TString(char c);
     int length() const;
     const char *str() const;
+
+    /* 字符串类中的常用成员函数 */
+    char &operator [] (int i); // 操作符重载函数，访问指定下标的字符
+    char operator [] (int i) const;
+    bool startWith(const char *s) const;    // 判断字符串是否以s开头
+    bool startWith(const TString &s) const;
+    bool endOf(const char *s) const;        // 判断字符串是否以s结束
+    bool endOf(const TString &s) const;
+    TString &insert(int i, const char *s);    // 在字符串的位置i处插入s
+    TString &insert(int i, const TString s);
+    TString &trim();          // 去掉字符串两端的空白
 
     /* 比较操作符重载函数 */
     bool operator == (const TString &s) const;
@@ -47,7 +58,5 @@ public:
 
 };
 }
-
-
 
 #endif
