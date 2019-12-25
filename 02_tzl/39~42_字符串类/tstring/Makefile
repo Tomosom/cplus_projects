@@ -4,6 +4,7 @@ include $(PARAM_FILE)
 CC := g++
 
 SRC += ./main.cpp
+SRC += ./tstring.cpp
 
 OBJ = $(SRC:%.cpp=%.o)
 
