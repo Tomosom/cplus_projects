@@ -86,6 +86,59 @@ void test_6()
     }
 }
 
+/* KMP test : indexOf */
+void test_7()
+{
+    TString s = "ababax";
+    cout << s.indexOf("ax") << endl;
+}
+
+/* KMP test : remove */
+void test_8()
+{
+    TString s = "abcde";
+    TString del = "abc";
+
+    //cout << s.remove(2,2).length() << endl;
+    //cout << s.remove("abc").str() << endl;
+    cout << s.remove(del).str() << endl;
+
+}
+
+/* KMP test : operator -  */
+void test_9()
+{
+    TString s = "abcde";
+    TString del = "abc";
+
+    cout << s.str() << endl;
+    cout << (s - del).str() << endl;
+
+    s -= "cd";
+    cout << s.str() << endl;
+
+}
+
+/* KMP test : replace */
+void test_10()
+{
+    TString s = "ababax";
+    
+    s.replace("baba", "xyz");
+
+    cout << s.str() << endl;
+}
+
+// 从字符串中创建字串
+void test_11()
+{
+    TString s = "ababax";
+    
+    TString s1 = s.sub(3, 2);
+
+    cout << s1.str() << endl;
+}
+
 int main(int argc, char **argv)
 {
     //test_1();
@@ -93,7 +146,12 @@ int main(int argc, char **argv)
     //test_3();
     //test_4();
     //test_5();
-    test_6();
+    //test_6();
+    //test_7();
+    //test_8();
+    //test_9();
+    //test_10();
+    test_11();
 
     return 0;
 }
