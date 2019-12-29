@@ -2,56 +2,81 @@
 
 using namespace std;
 
-// 求前N个数相加
-unsigned int sum(unsigned int n)
+struct Node {
+    int value;
+    Node *next;
+};
+
+Node *create_list(int v, int len)
 {
-    if (n > 1) {
-        return n + sum(n - 1);
+    Node *ret = NULL;
+    Node *slider = NULL;
+
+    for (int i = 0; i < len; i++) {
+        Node *n = new Node();
+
+        n->value = v++;
+        n->next = NULL;
+
+        if (slider == NULL) {
+            slider = n;
+            ret = n;
+        } else {
+            slider->next = n;
+            slider = n;
+        }
+    }
+
+    return ret;
+}
+
+void destroy_list(Node *list)
+{
+    while(list) {
+        Node *del = list;
+        list = list->next;
+        delete del;
+    }
+}
+
+void print_list(Node *list)
+{
+    while(list) {
+        cout << list->value << "->";
+        list = list->next;
+    }
+    cout << "NULL" << endl;
+}
+
+// 单链表递归转置
+Node *reverse(Node *list)
+{
+    if ((list == NULL) || (list->next == NULL)) {
+        return list;
     } else {
-        return 1;
+        Node *guard = list ->next;
+        Node *ret = reverse(list->next);
+        guard->next = list;
+        list->next = NULL;
+        return ret;
     }
+
 }
 
-// 求斐波那契数列
-unsigned int fac(unsigned int n)
-{
-    if (n > 2) {
-        return fac(n - 1) + fac(n - 2);
-    }
+// 单向已排好序的链表的合并，合并后仍是单向有序的
 
-    if (n == 1 || n == 2) {
-        return 1;
-    }
-}
-
-// 一条语句实现strlen的由来
-unsigned int _strlen(const char *s)
-{
-#if 0
-
-    if (*s != '\0') {
-        return 1 + _strlen(s + 1);
-    } else {
-        return 0;
-    }
-
-#else
-
-    return s ? (*s ? (1 + _strlen(s + 1)) : 0) : 0;
-
-#endif
-}
 
 int main(int argc, char **argv)
 {
+    Node *list = create_list(3, 10);
 
-    cout << sum(100) << endl;
+    print_list(list);
 
-    for(int i = 1; i <= 10; i++) {
-        cout << i << ":" << fac(i) << endl;
-    }
+    list = reverse(list);
 
-    cout << _strlen("tao") << endl;
+    print_list(list);
+
+    destroy_list(list);
 
     return 0;
 }
