@@ -64,9 +64,35 @@ Node *reverse(Node *list)
 }
 
 // 单向已排好序的链表的合并，合并后仍是单向有序的
+Node *merge(Node *list1, Node *list2)
+{
+    if (list1 == NULL) {
+        return list2;
+    } else if (list2 == NULL) {
+        return list1;
+    } else if (list1->value < list2->value) {
+#if 0
+        Node *list1_ = list1->next;
+        Node *list = merge(list1_, list2);
+        list1->next = list;
+        return list1;
+#else
+        return (list1->next = merge(list1->next, list2), list1); // 逗号表达式
+#endif
+    } else {
+#if 0
+        Node *list2_ = list2->next;
+        Node *list = merge(list2_, list1);
+        list2->next = list;
+        return list2;
+#else
+        return (list2->next = merge(list2->next, list1), list2);
+#endif
+    }
+}
 
-
-int main(int argc, char **argv)
+// 单链表转置测试
+void test1()
 {
     Node *list = create_list(3, 10);
 
@@ -77,6 +103,28 @@ int main(int argc, char **argv)
     print_list(list);
 
     destroy_list(list);
+}
+
+// merge测试
+void test2()
+{
+    Node *list1 = create_list(1, 5);
+    Node *list2 = create_list(2, 6);
+
+    print_list(list1);
+    print_list(list2);
+
+    Node *list = merge(list1, list2);
+
+    print_list(list);
+
+    destroy_list(list);
+}
+
+int main(int argc, char **argv)
+{
+    //test1();
+    test2();
 
     return 0;
 }
