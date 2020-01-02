@@ -33,5 +33,7 @@ CFLAGS += -I$(PARAM_DIR)/stack_and_queue/queue/link_queue/
 
 CFLAGS += -I$(PARAM_DIR)/tstring/
 
+CFLAGS += -I$(PARAM_DIR)/sort/
+
 SRC := $(PARAM_DIR)/object.cpp
 SRC += $(PARAM_DIR)/exception/exception.cpp
