@@ -23,6 +23,48 @@ private: // 构造函数被定义为私有的，表明Sort这个类不可能有�
         b = c;
     }
 
+    // 归并排序 辅助函数
+    template <typename T>
+    static void Merge(T src[], T helper[], int begin, int mid, int end, bool min2max = true) // 
+    {
+        int i = begin;
+        int j = mid + 1;
+        int k = begin;
+
+        while ((i <= mid) && (j <= end))
+        {
+            if (min2max ? (src[i] < src[j]) : (src[i] > src[j])) {
+                helper[k++] = src[i++];
+            } else {
+                helper[k++] = src[j++];
+            }
+        }
+
+        while (i <= mid) {
+            helper[k++] = src[i++];
+        }
+        
+        while (j <= end) {
+            helper[k++] = src[j++];
+        }
+
+        for (i = begin; i <= end; i++) {
+            src[i] = helper[i];
+        }
+    }
+
+    template <typename T>
+    static void Merge(T src[], T helper[], int begin, int end, bool min2max = true) // 
+    {
+        if (begin < end) {
+            int mid = (begin + end) / 2;
+            Merge(src, helper, begin, mid, min2max);
+            Merge(src, helper, mid + 1, end, min2max);
+            Merge(src, helper, begin, mid, end, min2max);
+        }
+    }
+
+
 public:
     // 选择排序, 该排序是不稳定的，会打破原先相同数据元素的先后关系
     template <typename T>
@@ -77,7 +119,7 @@ public:
         }
     }
 
-    /* 希尔排序 - 插入排序
+    /* 希尔排序 - 插入排序, 该排序是不稳定的
      * 基本思想：将待排序列划分为若干组，在每一组内进行插入排序，以使整个序列基本有序，然后再对整个序列进行插入排序
      */
     template <typename T>
@@ -129,6 +171,20 @@ public:
         } while(d > 1);
     }
 #endif
+
+    // 归并排序
+    // 基本思想：将两个或两个以上的有序序列合并成一个新的有序序列
+    template <typename T>
+    static void Merge(T array[], int len, bool min2max = true) // 
+    {
+        T *helper = new T[len];
+
+        if (helper != NULL) {
+            Merge(array, helper, 0, len - 1, min2max);
+        }
+
+        delete[] helper;
+    }
 
 
 };
