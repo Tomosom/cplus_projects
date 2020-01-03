@@ -25,7 +25,10 @@ int main(int argc, char **argv)
     //Sort::Shell_from_bubble(array, len, false);
 
     //Sort::Merge(array, len, true);
-    Sort::Merge(array, len, false);
+    //Sort::Merge(array, len, false);
+
+    //Sort::Quick(array, len, true);
+    Sort::Quick(array, len, false);
 
     for (int i = 0; i < len; i++) {
         cout << array[i] << endl;
