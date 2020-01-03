@@ -106,17 +106,22 @@ public:
      * 基本思想：将待排序列划分为若干组，在每一组内进行冒泡排序，以使整个序列基本有序，然后再对整个序列进行冒泡排序
      */
     template <typename T>
-    static void Shell_from_bubble(T array[], int len, bool min2max = true) // O(n3/2)
+    static void Shell_from_bubble(T array[], int len, bool min2max = true) // test
     {
         int d = len;
         do {
             d = d / 3 + 1; // 实践证明这样减小d比较好，也可以d--, 但效率不会好
             bool exchange = true;
-            for (int i = d; (i < len) && exchange; i += d) {
+            for (int i = d - 1; (i < len - 1) && exchange; i += d) {
                 exchange = false;
-                for (int j = i; j < len - 1; j += d) {
-                    if (min2max ? (array[j] < array [j + d]) : (array[j] > array [j + d])) {
-                        Swap(array[j], array[j + d]);
+                // 定位到分组的最后一个
+                int j = i;
+                while (j < len - d) {
+                    j += d;
+                }
+                for (; j > i; j -= d) {
+                    if (min2max ? (array[j] < array [j - d]) : (array[j] > array [j - d])) {
+                        Swap(array[j], array[j - d]);
                         exchange = true;
                     }
                 }
