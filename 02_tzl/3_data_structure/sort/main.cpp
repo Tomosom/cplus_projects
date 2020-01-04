@@ -1,11 +1,12 @@
 #include <iostream>
 #include "sort.h"
-
+#include "static_array.h"
 using namespace std;
 using namespace DTLib;
 
 int main(int argc, char **argv)
 {
+#if 0
     int array[] = {3,1,2,5,4,9,8,7};
 
     int len = sizeof(array) / sizeof(int);
@@ -33,7 +34,20 @@ int main(int argc, char **argv)
     for (int i = 0; i < len; i++) {
         cout << array[i] << endl;
     }
+#else // 将排序类应用于数组类的测试
+    StaticArray<double, 5> sa;
+    
+    for (int i = 0; i < 5; i++) {
+        sa[i] = i;
+    }
 
+    Sort::Quick(sa, false);
+
+    for (int i = 0; i < sa.length(); i++) {
+        cout << sa[i] << endl;
+    }
+
+#endif
 
     return 0;
 }

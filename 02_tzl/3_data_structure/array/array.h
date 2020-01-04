@@ -42,6 +42,13 @@ public:
     {
         return (const_cast<Array<T>&>(*this))[i];
     }
+
+    /* 为了将排序类(Sort)应用于该数组类，固需新增一个成员函数 */
+    T *array() const // 返回所封装的原生数组的首地址
+    {
+        return  m_array;
+    }
+
     virtual int length() const = 0;
 
 };

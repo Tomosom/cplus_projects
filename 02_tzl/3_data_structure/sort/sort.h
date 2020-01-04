@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include "object.h"
+#include "array.h" /* 为了将该排序类应用于数组类(Array) */
 
 using namespace std;
 using namespace DTLib;
@@ -225,6 +226,44 @@ public:
     static void Quick(T array[], int len, bool min2max = true) // O(n*logn)
     {
         Quick(array, 0, len - 1, min2max);
+    }
+
+    /***************************************************/
+    /* 为了将该排序类应用于数组类(Array)，固需新增重载函数 */
+    template <typename T>
+    static void Select(Array<T> &array, bool min2max = true)
+    {
+        Select(array.array(), array.length(), min2max);
+    }
+    
+    template <typename T>
+    static void Insert(Array<T> &array, bool min2max = true)
+    {
+        Insert(array.array(), array.length(), min2max);
+    }
+    
+    template <typename T>
+    static void Bubble(Array<T> &array, bool min2max = true)
+    {
+        Bubble(array.array(), array.length(), min2max);
+    }
+
+    template <typename T>
+    static void Shell_from_insert(Array<T> &array, bool min2max = true)
+    {
+        Shell_from_insert(array.array(), array.length(), min2max);
+    }
+
+    template <typename T>
+    static void Merge(Array<T> &array, bool min2max = true)
+    {
+        Merge(array.array(), array.length(), min2max);
+    }
+
+    template <typename T>
+    static void Quick(Array<T> &array, bool min2max = true)
+    {
+        Quick(array.array(), array.length(), min2max);
     }
 
 };
