@@ -5,9 +5,6 @@
 #include "object.h"
 #include "array.h" /* 为了将该排序类应用于数组类(Array) */
 
-using namespace std;
-using namespace DTLib;
-
 namespace DTLib {
 
 class Sort : public Object {
