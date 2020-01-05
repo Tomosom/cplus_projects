@@ -3,7 +3,6 @@
  *        ^         ^
  *        |         |
  *      Tree ----> TreeNode
- * 
  */
 
 #ifndef TREE_H
