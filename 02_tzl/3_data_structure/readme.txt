@@ -22,6 +22,20 @@
 
 
 
+"includePath": [
+                "${workspaceFolder}/**",
+                "${workspaceFolder}",
+                "${workspaceFolder}/exception",
+                "${workspaceFolder}/list",
+                "${workspaceFolder}/list/link_list",
+                "${workspaceFolder}/pointer",
+                "${workspaceFolder}/pointer/shared_pointer",
+                "${workspaceFolder}/tree"
+],
+
+
+
+
 directory
 08_template  
 09_智能指针  
