@@ -15,11 +15,6 @@
 #include "gtree_node.h"
 #include "exception.h"
 
-#if 0 // for test
-#include <iostream>
-using namespace std;
-#endif
-
 namespace DTLib {
 
 template <typename T>
@@ -68,14 +63,7 @@ protected:
                 free(node->child.current());
             }
 
-            if (node->flag()) {
-                delete node;
-            }
-#if 0 // for test
-            else {
-                cout << node->value << endl;
-            }
-#endif
+            delete node;
         }
     }
 
@@ -109,7 +97,7 @@ public:
     bool insert(const T &value, TreeNode<T> *parent) // 插入数据元素
     {
         bool ret = true;
-        GTreeNode<T> *node = GTreeNode<T>::NewNode();
+        GTreeNode<T> *node = new GTreeNode<T>();
         if (node != NULL) {
             node->value = value;
             node->parent = parent;
