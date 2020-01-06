@@ -13,6 +13,7 @@
 
 #include "tree.h"
 #include "gtree_node.h"
+#include "exception.h"
 
 namespace DTLib {
 
@@ -59,12 +60,40 @@ public:
     {
         bool ret = true;
         
+        if (node != NULL) {
+            if (this->m_root == NULL) {
+                node->parent = NULL;
+                this->m_root = node;
+            } else {
+                GTreeNode<T> *np = find(node->parent);
+                if (np != NULL) {
+                    // 判断要插入的新节点是否已经存在于树中
+                    GTreeNode<T> *n = dynamic_cast<GTreeNode<T>*>(node);
+                    if (np->child.find(n) < 0) {
+                        np->child.insert(n);
+                    }
+                } else {
+                    THROW_EXCEPTION(InvalidParameterException, "Invalid parent tree node ...");
+                }
+            }
+        } else {
+            THROW_EXCEPTION(InvalidParameterException, "Parameter node cannot be NULL ...");
+        }
+
         return ret;
     }
     bool insert(const T &value, TreeNode<T> *parent) // 插入数据元素
     {
         bool ret = true;
-        
+        GTreeNode<T> *node = new GTreeNode<T>();
+        if (node != NULL) {
+            node->value = value;
+            node->parent = parent;
+            insert(node);
+        } else {
+            THROW_EXCEPTION(NoEnoughMemoryException, "No memory to create new tree node ...");
+        }
+
         return ret;
     }
     SharedPointer< Tree<T> > remove(const T &value)
