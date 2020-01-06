@@ -33,13 +33,15 @@ public:
             }
         }
     }
+
+    //在拷贝构造函数的地方也应该调用下父类的构造函数，不然会编译告警
     SharedPointer(const SharedPointer<T> &obj) : Pointer<T>(NULL)
     {
         assign(obj);
     }
     SharedPointer<T> &operator=(const SharedPointer<T> &obj)
     {
-        if (this != &obj) {
+        if (this != &obj) { // 避免自赋值
             clear();
             assign(obj);
         }
@@ -70,7 +72,7 @@ public:
     }
 };
 
-
+/* 通过全局函数的方法重载 */
 template <typename T>
 bool operator == (const SharedPointer<T> &l, const SharedPointer<T> &r)
 {
