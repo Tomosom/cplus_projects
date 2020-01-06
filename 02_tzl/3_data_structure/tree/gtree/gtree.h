@@ -55,13 +55,13 @@ protected:
     }
 
 public:
-    bool insert(TreeNode<T> *node)
+    bool insert(TreeNode<T> *node) // 插入新节点
     {
         bool ret = true;
         
         return ret;
     }
-    bool insert(const T &value, TreeNode<T> *parent)
+    bool insert(const T &value, TreeNode<T> *parent) // 插入数据元素
     {
         bool ret = true;
         
@@ -76,14 +76,15 @@ public:
         return NULL;
     }
 
-    GTreeNode<T> *find(const T &value) const
+    GTreeNode<T> *find(const T &value) const // 以值的方式查找
     {
         return find(root(), value);
     }
-    GTreeNode<T> *find(TreeNode<T> *node) const
+    GTreeNode<T> *find(TreeNode<T> *node) const // 以节点的方式查找
     {
         return find(root(), dynamic_cast<GTreeNode<T> *>(node));
     }
+    
     GTreeNode<T> *root() const // 访问树的根节点
     {
         return dynamic_cast<GTreeNode<T>*>(this->m_root);
