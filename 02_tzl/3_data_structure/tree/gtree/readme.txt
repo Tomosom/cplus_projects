@@ -11,5 +11,4 @@ gtree_node.h_v1.1 & gtree.h_v1.0
         3. 提供工厂方法 GTreeNode<T> *NewNode()   --静态成员函数
         4. 在工厂方法中new新节点并将m_flag设置为true
 
-main.cpp_v1.1
-    for test --> find, insert, clear操作
+main.cpp

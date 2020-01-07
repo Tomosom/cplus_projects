@@ -26,6 +26,27 @@ template <typename T>
 class GTree : public Tree<T> {
     // implementation
 protected:
+    // 第二个参数是一个引用， 这个引用是一个指针的别名
+    // 将node为根节点的字树从原来的树中删除
+    // ret作为子树返回（ret指向对空间中的树对象）
+    void remove(GTreeNode<T> *node, GTree<T> *&ret)
+    {
+        ret = new GTree<T>();
+        if (ret == NULL) {
+            THROW_EXCEPTION(NoEnoughMemoryException, "No memory to create new tree ...");
+        } else {
+            if (root() == node) {
+                this->m_root = NULL;
+            } else {
+                LinkList<GTreeNode<T>*> &child = dynamic_cast<GTreeNode<T>*>(node->parent)->child;
+                child.remove(child.find(node));
+                node->parent = NULL;
+            }
+
+            ret->m_root = node;
+        }
+    }
+
     GTreeNode<T> *find(GTreeNode<T> *node, const T &value) const
     {
         GTreeNode<T> *ret  = NULL;
@@ -120,13 +141,34 @@ public:
 
         return ret;
     }
+
+    // 返回指向Tree的智能指针
+    // 用智能指针管理返回的树的生命周期
     SharedPointer< Tree<T> > remove(const T &value)
     {
-        return NULL;
+        GTree<T> *ret = NULL;
+        GTreeNode<T> *node = find(value);
+
+        if (node == NULL) {
+            THROW_EXCEPTION(InvalidParameterException, "Can not find the node via parameter value ...");
+        } else {
+            remove(node, ret);
+        }
+
+        return ret;
     }
     SharedPointer< Tree<T> > remove(TreeNode<T> *node)
     {
-        return NULL;
+        GTree<T> *ret = NULL;
+        node = find(node);
+
+        if (node == NULL) {
+            THROW_EXCEPTION(InvalidParameterException, "Parameter node is invalid ...");
+        } else {
+            remove(dynamic_cast<GTreeNode<T>*>(node), ret); // 需强转，不然报错
+        }
+
+        return ret;
     }
 
     GTreeNode<T> *find(const T &value) const // 以值的方式查找

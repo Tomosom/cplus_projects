@@ -64,13 +64,17 @@ int main()
     node = t.find('H');
     t.insert('M', node);
     
-    t.clear(); // clear test
+    //t.clear(); // clear test
+    //t.remove('D'); // remove test
+    //t.remove(t.find('D')); // remove test
+    SharedPointer< Tree<char> > p = t.remove(t.find('D')); // remove test
 
 
     // 通过叶节点遍历到根节点
     const char *s = "KLFGMIJ";
     for(int i = 0; i < 7; i++) {
-        TreeNode<char> *node = t.find(s[i]);
+        //TreeNode<char> *node = t.find(s[i]);
+        TreeNode<char> *node = p->find(s[i]); // 打印被删除的子树
         while(node != NULL) {
             cout << node->value << " ";
             node = node->parent;
