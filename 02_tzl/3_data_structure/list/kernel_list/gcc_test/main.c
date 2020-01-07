@@ -4,6 +4,8 @@
 
 void list_demo_1()  // list_head放在结构体前面的情形
 {
+    int i = 0;
+
     struct Node {
         struct list_head head;
         int value;
@@ -16,7 +18,7 @@ void list_demo_1()  // list_head放在结构体前面的情形
     INIT_LIST_HEAD(list);
 
     printf("insert begin ...\n");
-    for(int i = 0; i < 5; i++) {
+    for(i = 0; i < 5; i++) {
         struct Node *n = (struct Node *)malloc(sizeof(struct Node));
         n->value = i;
         list_add_tail((struct list_head*)n, list); // 尾插法
@@ -44,6 +46,8 @@ void list_demo_1()  // list_head放在结构体前面的情形
 
 void list_demo_2() // list_head放在结构体后面的情形
 {
+    int i = 0;    
+
     struct Node {
         int value;
         struct list_head head;
@@ -56,7 +60,7 @@ void list_demo_2() // list_head放在结构体后面的情形
     INIT_LIST_HEAD(list);
 
     printf("insert begin ...\n");
-    for(int i = 0; i < 5; i++) {
+    for(i = 0; i < 5; i++) {
         struct Node *n = (struct Node *)malloc(sizeof(struct Node));
         n->value = i;
         list_add(&n->head, list); // 头插法

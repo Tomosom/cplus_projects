@@ -28,6 +28,13 @@
                 "${workspaceFolder}/exception",
                 "${workspaceFolder}/list",
                 "${workspaceFolder}/list/link_list",
+                "${workspaceFolder}/list/kernel_list",
+                "${workspaceFolder}/stack_and_queue/queue",
+                "${workspaceFolder}/stack_and_queue/queue/link_queue",
+                "${workspaceFolder}/stack_and_queue/queue/static_queue",
+                "${workspaceFolder}/stack_and_queue/stack",
+                "${workspaceFolder}/stack_and_queue/stack/link_stack",
+                "${workspaceFolder}/stack_and_queue/stack/static_stack",
                 "${workspaceFolder}/pointer",
                 "${workspaceFolder}/pointer/shared_pointer",
                 "${workspaceFolder}/tree"

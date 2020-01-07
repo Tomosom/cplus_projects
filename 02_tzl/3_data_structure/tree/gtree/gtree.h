@@ -14,6 +14,7 @@
 #include "tree.h"
 #include "gtree_node.h"
 #include "exception.h"
+#include "link_queue.h"
 
 #if 0 // for test
 #include <iostream>
@@ -22,12 +23,13 @@ using namespace std;
 //#define MAX(a, b) ((a) > (b) ? (a) : (b))
 namespace DTLib {
 
-
-
 template <typename T>
 class GTree : public Tree<T> {
     // implementation
 protected:
+
+    LinkQueue<T> m_queue; // 用作层次遍历
+
     // 第二个参数是一个引用， 这个引用是一个指针的别名
     // 将node为根节点的字树从原来的树中删除
     // ret作为子树返回（ret指向对空间中的树对象）
@@ -265,6 +267,43 @@ public:
         free(root());
         this->m_root = NULL;
     }
+#if 0
+    // 树形结构的层次遍历 相关函数
+    bool begin()
+    {
+        bool ret = (root() != NULL);
+        if (ret) {
+            m_queue.clear();
+            m_queue.add(root());
+        }
+        return ret;
+    }
+    bool end()
+    {
+        return (m_queue.length() == 0);
+    }
+    bool next()
+    {
+        bool ret = (m_queue.length() > 0);
+        if (ret) {
+            GTreeNode<T> *node = m_queue.front();
+            m_queue.remove();
+            for(node->child.move(0); !node->child.end(); node->child.next()) {
+                m_queue.add(node->child.current());
+            }
+        }
+
+        return ret;
+    }
+    T current()
+    {
+        if (!end()) {
+            return m_queue.front()->value;
+        } else {
+            THROW_EXCEPTION(InvalidOperationException, "No value at current position ...");
+        }
+    }
+#endif
 
     ~GTree()
     {
