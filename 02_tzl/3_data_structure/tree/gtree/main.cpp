@@ -63,7 +63,12 @@ int main()
   
     node = t.find('H');
     t.insert('M', node);
-    
+
+    cout << t.count() << endl; // 获取节点个数测试
+    cout << t.height() << endl; // 获取节点高度测试
+    cout << t.degree() << endl; // 获取节点的度测试
+
+#if 0 // remove test
     //t.clear(); // clear test
     //t.remove('D'); // remove test
     //t.remove(t.find('D')); // remove test
@@ -82,6 +87,6 @@ int main()
 
         cout << endl;
     }
-
+#endif
     return 0;
 }

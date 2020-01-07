@@ -19,8 +19,10 @@
 #include <iostream>
 using namespace std;
 #endif
-
+//#define MAX(a, b) ((a) > (b) ? (a) : (b))
 namespace DTLib {
+
+
 
 template <typename T>
 class GTree : public Tree<T> {
@@ -100,6 +102,48 @@ protected:
         }
     }
 
+    int count(GTreeNode<T> *node) const
+    {
+        int ret = 0;
+
+        if(node != NULL) {
+            ret = 1; // 根节点
+            for(node->child.move(0); !node->child.end(); node->child.next()) {
+                ret += count(node->child.current());
+            }
+        }
+        return ret;
+    }
+
+    int height(GTreeNode<T> *node) const
+    {
+        int ret = 0;
+
+        if(node != NULL) {
+            for(node->child.move(0); !node->child.end(); node->child.next()) {
+                int h = height(node->child.current());
+                ret = ret > h ? ret : h;
+            }
+            ret += 1;
+        }
+        return ret;
+    }
+
+    int degree(GTreeNode<T> *node) const
+    {
+        int ret = 0;
+
+        if (node != NULL) {
+            ret = node->child.length();
+
+            for (node->child.move(0); !node->child.end(); node->child.next()) {
+                int d = degree(node->child.current());
+                ret = ret > d ? ret : d;
+            }
+        }
+
+        return ret;
+    }
 public:
     bool insert(TreeNode<T> *node) // 插入新节点
     {
@@ -184,18 +228,35 @@ public:
     {
         return dynamic_cast<GTreeNode<T>*>(this->m_root);
     }
-    // 获取树的属性
-    int degree() const // 获取树的度
+    /* 获取树的属性 */
+    /*
+     *               | return 0;                                        node == NULL
+     *  degree(node) |
+     *               | MAX{ degree(node->child), node->child.length) }; node != NULL
+     */
+    int degree() const // 递归方法，获取树的度, 结点拥有的子树数目成为结点的度，树的度定义为所有结点中度的最大值
     {
-        return 0;
+        return degree(root());
     }
-    int count() const  // 获取树的节点数
+
+    /*
+     *             | return 0;                 node == NULL
+     * count(node) | return 1;                 node->child.length == 0
+     *             | count(node->child) + 1;   node->child.length > 0
+     */
+    int count() const  // 递归方法，获取树的节点数
     {
-        return 0;
+        return count(root());
     }
-    int height() const // 获取树的高度
+
+    /*
+     *              | return 0;                            node == NULL
+     * height(node) | return 1;                            node->child.length == 0
+     *              | return MAX{height(node->child)} + 1; node->child.length > 0
+     */
+    int height() const // 递归方法，获取树的高度
     {
-        return 0;
+        return height(root());
     }
 
     // 清空树中的元素
