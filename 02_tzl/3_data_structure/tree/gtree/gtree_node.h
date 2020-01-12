@@ -11,7 +11,7 @@ class GTreeNode : public TreeNode<T> {
 protected:
     bool m_flag;
 
-    void *operator new (unsigned int size) throw() // 声明一个不抛出异常的函数
+    void *operator new (size_t size) throw() // 声明一个不抛出异常的函数
     {
         return Object::operator new(size);
     }
