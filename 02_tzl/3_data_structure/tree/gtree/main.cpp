@@ -68,6 +68,11 @@ int main()
     cout << t.height() << endl; // 获取节点高度测试
     cout << t.degree() << endl; // 获取节点的度测试
 
+    for (t.begin(); !t.end(); t.next())
+    {
+        cout << t.current() << endl;
+    }
+
 #if 0 // remove test
     //t.clear(); // clear test
     //t.remove('D'); // remove test

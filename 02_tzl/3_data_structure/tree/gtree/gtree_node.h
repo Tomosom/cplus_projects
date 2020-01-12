@@ -11,6 +11,9 @@ class GTreeNode : public TreeNode<T> {
 protected:
     bool m_flag;
 
+    GTreeNode(const GTreeNode<T>&);
+    GTreeNode &operator = (const GTreeNode<T>&); // 不能被复制
+
     void *operator new (size_t size) throw() // 声明一个不抛出异常的函数
     {
         return Object::operator new(size);

@@ -28,7 +28,10 @@ class GTree : public Tree<T> {
     // implementation
 protected:
 
-    LinkQueue<T> m_queue; // 用作层次遍历
+    LinkQueue<GTreeNode<T>*> m_queue; // 用作层次遍历
+    GTree(const GTree<T>&);
+    GTree<T> &operator = (const GTree<T> &); // 定义成proteced,表明该类型不能被复制
+
 
     // 第二个参数是一个引用， 这个引用是一个指针的别名
     // 将node为根节点的字树从原来的树中删除
@@ -147,6 +150,11 @@ protected:
         return ret;
     }
 public:
+    GTree() 
+    {
+
+    }
+
     bool insert(TreeNode<T> *node) // 插入新节点
     {
         bool ret = true;
@@ -199,6 +207,7 @@ public:
             THROW_EXCEPTION(InvalidParameterException, "Can not find the node via parameter value ...");
         } else {
             remove(node, ret);
+            m_queue.clear(); // 遍历所需队列
         }
 
         return ret;
@@ -212,6 +221,7 @@ public:
             THROW_EXCEPTION(InvalidParameterException, "Parameter node is invalid ...");
         } else {
             remove(dynamic_cast<GTreeNode<T>*>(node), ret); // 需强转，不然报错
+            m_queue.clear(); // 遍历所需队列
         }
 
         return ret;
@@ -266,10 +276,23 @@ public:
     {
         free(root());
         this->m_root = NULL;
+        m_queue.clear(); //遍历所需的队列
     }
-#if 0
+#if 1
     // 树形结构的层次遍历 相关函数
-    bool begin()
+    /*
+     * 设计思路：
+     * - 在树中定义一个游标( GTreeNode<T>* ) 
+     * - 遍历开始前将游标指向根节点( root() )
+     * - 获取游标指向的数据元素
+     * - 通过节点中的child成员移动游标
+     * 
+     * 使用：
+     * for (tree.begin(); !tree.end(); tree.next()) {
+     *     tree.current();
+     * }
+     */
+    bool begin() // 初始化，准备进行遍历访问
     {
         bool ret = (root() != NULL);
         if (ret) {
@@ -278,11 +301,11 @@ public:
         }
         return ret;
     }
-    bool end()
+    bool end() // 判断游标是否达到尾部
     {
         return (m_queue.length() == 0);
     }
-    bool next()
+    bool next() // 移动游标，指向下一个节点
     {
         bool ret = (m_queue.length() > 0);
         if (ret) {
@@ -295,7 +318,7 @@ public:
 
         return ret;
     }
-    T current()
+    T current() // 获取游标所指定的数据元素
     {
         if (!end()) {
             return m_queue.front()->value;
