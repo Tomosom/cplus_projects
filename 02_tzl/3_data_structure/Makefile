@@ -1,28 +1,47 @@
-PARAM_FILE := ./Makefile.param
-include Makefile.param
+SUBDIRS = ./array/static_array \
+          ./array/dynamic_array \
+          ./list/seq_list/static_list \
+          ./list/seq_list/dynamic_list \
+          ./list/link_list \
+          ./list/link_list/static_link_list \
+          ./list/link_list/circle_list \
+          ./list/dual_link_list \
+          ./list/dual_link_list/dual_circle_list \
+          ./pointer/shared_pointer \
+          ./pointer/smart_pointer \
+          ./sort \
+          ./stack_and_queue/stack/static_stack \
+          ./stack_and_queue/stack/link_stack \
+          ./stack_and_queue/queue/static_queue \
+          ./stack_and_queue/queue/link_queue \
+          ./tstring \
+          ./tree \
+          ./tree/gtree \
+          ./tree/btree \
 
-CC := g++
+MAKEFLAGS = --no-print-directory
 
-#SRC_PATH = .
-#DIRS = $(shell find $(SRC_PATH) -maxdepth 4 -type d)
-#SRC = $(foreach dir, $(DIRS), $(wildcard $(dir)/*.cpp))
-##SRC = $(wildcard *.cpp)
-
-SRC += ./main.cpp
-#SRC += ./object.cpp
-#SRC += ./exception/exception.cpp
-
-#OBJ = $(patsubst %.cpp, %.o, $(SRC))
-OBJ = $(SRC:%.cpp=%.o)
-
-TARGET = a.out
-
-$(TARGET):$(SRC)
-	$(CC) $(CFLAGS) -o $@ $^
-
-#$(CC) $(CFLAGS) -o $@ $^ -g
+.PHONY:all
+all:
+	@list='$(SUBDIRS)'; \
+	for subdir in $$list; \
+		do \
+			echo -e "\033[36m----->> make $$subdir\033[0m"; \
+			pushd $$subdir > /dev/null; \
+			make; \
+			popd > /dev/null; \
+		done
 
 .PHONY:clean
 clean:
-	$(RM) $(OBJ) $(TARGET)
+	@list='$(SUBDIRS)'; \
+	for subdir in $$list; \
+		do \
+			echo -e "\033[36m----->> clean $$subdir\033[0m"; \
+			pushd $$subdir > /dev/null; \
+			make clean; \
+			popd > /dev/null; \
+		done
 
+
+#sudo dpkg-reconfigure dash
