@@ -37,6 +37,7 @@ CFLAGS += -I$(PARAM_DIR)/sort/
 
 CFLAGS += -I$(PARAM_DIR)/tree/
 CFLAGS += -I$(PARAM_DIR)/tree/gtree/
+CFLAGS += -I$(PARAM_DIR)/tree/btree/
 
 SRC := $(PARAM_DIR)/object.cpp
 SRC += $(PARAM_DIR)/exception/exception.cpp
