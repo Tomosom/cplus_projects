@@ -1,7 +1,7 @@
 #ifndef BTREE_NODE_H
 #define BTREE_NODE_H
 
-#include "tree.h"
+#include "tree_node.h"
 
 namespace DTLib {
 
@@ -11,8 +11,21 @@ public:
     BTreeNode<T> *left;
     BTreeNode<T> *right;
 
-    // factory pattern
+    BTreeNode()
+    {
+        left = NULL;
+        right = NULL;
+    }
 
+    // factory pattern
+    static BTreeNode<T> *NewNode()
+    {
+        BTreeNode<T> *ret = new BTreeNode<T>();
+        if (ret != NULL) {
+            ret->m_flag = true;
+        }
+        return ret;
+    }
     // ...
 
 };

@@ -27,11 +27,7 @@ template <typename T>
 class GTree : public Tree<T> {
     // implementation
 protected:
-
     LinkQueue<GTreeNode<T>*> m_queue; // 用作层次遍历
-    GTree(const GTree<T>&);
-    GTree<T> &operator = (const GTree<T> &); // 定义成proteced,表明该类型不能被复制
-
 
     // 第二个参数是一个引用， 这个引用是一个指针的别名
     // 将node为根节点的字树从原来的树中删除

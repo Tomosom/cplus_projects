@@ -17,7 +17,10 @@ template <typename T>
 class Tree : public Object {
 protected:
     TreeNode<T> *m_root;
-
+    
+    // 定义成proteced,禁止两棵树之间相互复制
+    Tree(const Tree<T>&);
+    Tree<T> &operator = (const Tree<T> &);
 public:
     Tree() { m_root = NULL; }
     virtual bool insert(TreeNode<T> *node) = 0;
