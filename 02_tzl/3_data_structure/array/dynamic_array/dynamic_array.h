@@ -61,6 +61,7 @@ public:
         if (this != &obj) { // 避免自赋值
             update(copy(obj.m_array, obj.m_length, obj.m_length), obj.m_length);
         }
+        return *this;
     }
 
     int length() const

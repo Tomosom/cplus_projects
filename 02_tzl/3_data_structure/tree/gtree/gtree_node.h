@@ -38,6 +38,7 @@ public:
         if (ret != NULL) {
             ret->m_flag = true;
         }
+        return ret;
     }
 
 

@@ -14,6 +14,7 @@ SUBDIRS = ./array/static_array \
           ./stack_and_queue/stack/link_stack \
           ./stack_and_queue/queue/static_queue \
           ./stack_and_queue/queue/link_queue \
+          ./stack_and_queue/two_interesting_questions \
           ./tstring \
           ./tree \
           ./tree/gtree \

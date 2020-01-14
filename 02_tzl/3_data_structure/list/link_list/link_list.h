@@ -78,6 +78,7 @@ public:
                 THROW_EXCEPTION(NoEnoughMemoryException, "No memory to insert new element");
             }
         }
+        return ret;
     }
 	bool remove(int i)
     {
@@ -174,6 +175,7 @@ public:
             m_current = position(i)->next;
             m_step = step;
         }
+        return ret;
     }
 
     // 右边是否达到尾部(是否为空)
