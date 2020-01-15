@@ -16,6 +16,13 @@
 
 namespace DTLib {
 
+enum BTNodePos {
+    ANY,
+    LEFT,
+    RIGHT
+};
+
+
 template <typename T>
 class BTree : public Tree<T> {
 protected:
@@ -55,18 +62,87 @@ protected:
         }
         return ret;
     }
+
+    /*
+     * n   : 要插入的节点
+     * np  : 要插入的节点的父节点
+     * pos : 插入的位置
+     */
+    virtual bool insert(BTreeNode<T> *n, BTreeNode<T> *np, BTNodePos pos)
+    {
+        bool ret = true;
+        if (pos == ANY) {
+            if (np->left == NULL) {
+                np->left = n;
+            } else if (np->right == NULL) {
+                np->right = n;
+            } else {
+                ret = false;
+            }
+        } else if (pos == LEFT) {
+            if (np->left == NULL) {
+                np->left = n;
+            } else {
+                ret = false;
+            }
+        } else if (pos == RIGHT) {
+            if (np->right == NULL) {
+                np->right = n;
+            } else {
+                ret = false;
+            }
+        } else {
+            ret = false;
+        }
+        return ret;
+    }
+
 public:
     // implementation
     bool insert(TreeNode<T> *node)
     {
-        int ret = true;
+        return insert(node, ANY);
+    }
+    virtual bool insert(TreeNode<T> *node, BTNodePos pos)
+    {
+        bool ret = true;
+
+        if (node != NULL) {
+            if (this->m_root == NULL) {
+                node->parent = NULL;
+                this->m_root = node;
+            } else {
+                BTreeNode<T> *np = find(node->parent);
+                if (np != NULL) {
+                    ret = insert(dynamic_cast<BTreeNode<T>*>(node), np, pos);
+                } else {
+                    THROW_EXCEPTION(InvalidParameterException, "Invalid parent tree node ...");
+                }
+            }
+        } else {
+            THROW_EXCEPTION(InvalidParameterException, "Parameter node can not be NULL ...");
+        }
 
         return ret;
     }
     bool insert(const T &value, TreeNode<T> *parent)
     {
-        int ret = true;
-
+        return insert(value, parent, ANY);
+    }
+    virtual bool insert(const T &value, TreeNode<T> *parent, BTNodePos pos)
+    {
+        bool ret = true;
+        BTreeNode<T> *node = BTreeNode<T>::NewNode();
+        if (node == NULL) {
+            THROW_EXCEPTION(NoEnoughMemoryException, "No memory to create new node ...");
+        } else {
+            node->value = value;
+            node->parent = parent;
+            ret = insert(node, pos);
+            if (!ret) {
+                delete node; // 若父节点不存在，需销毁创建的节点
+            }
+        }
         return ret;
     }
     SharedPointer< Tree<T> > remove(const T &value)
