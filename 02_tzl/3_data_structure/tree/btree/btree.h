@@ -14,6 +14,10 @@
 #include "tree.h"
 #include "btree_node.h"
 
+#if 0   // for clear() test
+#include <iostream>
+#endif
+
 namespace DTLib {
 
 enum BTNodePos {
@@ -114,6 +118,21 @@ protected:
                 node->parent = NULL;
             }
             ret->m_root = node;
+        }
+    }
+
+    virtual void free(BTreeNode<T> *node)
+    {
+        if (node != NULL)
+        {
+            free(node->left);
+            free(node->right);
+#if 0   // for clear() test
+            std::cout << node->value << std::endl;
+#endif
+            if (node->flag()) {
+                delete node;
+            }
         }
     }
 
@@ -231,8 +250,14 @@ public:
     }
     
     /* clear 操作注意是否对空间创建的节点 */
-    void clear()       // 清空树中的元素
+    /*
+     *            | return ;                                            node == NULL
+     * free(node) | 
+     *            | free(node->left); free(node->right); delete node;   node != NULL
+     */
+    void clear()       // 递归方法，清空树中的元素
     {
+        free(root());
         this->m_root = NULL;
     }
 
