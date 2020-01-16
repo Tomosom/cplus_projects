@@ -22,7 +22,6 @@ enum BTNodePos {
     RIGHT
 };
 
-
 template <typename T>
 class BTree : public Tree<T> {
 protected:
@@ -97,6 +96,27 @@ protected:
         return ret;
     }
 
+    virtual void remove(BTreeNode<T> *node, BTree<T> *&ret)
+    {
+        ret = new BTree<T>();
+        if (ret == NULL) {
+            THROW_EXCEPTION(NoEnoughMemoryException, "No memory to create new tree ...");
+        } else {
+            if (root() == node) {
+                this->m_root = NULL;
+            } else {
+                BTreeNode<T> *parent = dynamic_cast<BTreeNode<T>*>(node->parent);
+                if (parent->left == node) {
+                    parent->left = NULL;
+                } else if (parent->right == node) {
+                    parent->right = NULL;
+                }
+                node->parent = NULL;
+            }
+            ret->m_root = node;
+        }
+    }
+
 public:
     // implementation
     bool insert(TreeNode<T> *node)
@@ -145,16 +165,32 @@ public:
         }
         return ret;
     }
+
     SharedPointer< Tree<T> > remove(const T &value)
     {
-     
+        BTree<T> *ret = NULL;
+        BTreeNode<T> *node = find(value);
 
-        return NULL;
+        if (node == NULL) {
+            THROW_EXCEPTION(InvalidParameterException, "Can not find the tree node via value ...");
+        } else {
+            remove(node, ret);
+        }
+
+        return ret;
     }
     SharedPointer< Tree<T> > remove(TreeNode<T> *node)
     {
+        BTree<T> *ret = NULL;
 
-        return NULL;
+        node = find(node);
+        if (node == NULL) {
+            THROW_EXCEPTION(InvalidParameterException, "Parameter node is invalid ...");
+        } else {
+            remove(dynamic_cast<BTreeNode<T>*>(node), ret);
+        }
+
+        return ret;
     }
     
     /*
@@ -193,6 +229,8 @@ public:
     {
         return 0;
     }
+    
+    /* clear 操作注意是否对空间创建的节点 */
     void clear()       // 清空树中的元素
     {
         this->m_root = NULL;

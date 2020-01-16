@@ -33,10 +33,14 @@ int main(int argc, char **argv)
     n = bt.find(6);
     bt.insert(11, n, LEFT);
 
+    // remove test
+    SharedPointer< Tree<int> > sp = bt.remove(3);
+
     // 从叶节点开始反向打印
     int a[] = {8, 9, 10, 11, 7};
     for(int i = 0; i < 5; i++) {
-        TreeNode<int> *node = bt.find(a[i]);
+        //TreeNode<int> *node = bt.find(a[i]);
+        TreeNode<int> *node = sp->find(a[i]);
 
         while(node) {
             cout << node->value << " ";
