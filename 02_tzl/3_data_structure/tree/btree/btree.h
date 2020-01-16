@@ -14,7 +14,8 @@
 #include "tree.h"
 #include "btree_node.h"
 
-#if 0   // for clear() test
+// for clear() test
+#if 0
 #include <iostream>
 #endif
 
@@ -136,6 +137,58 @@ protected:
         }
     }
 
+    int count(BTreeNode<T> *node) const
+    {
+#if 0
+        int ret = 0;
+        if (node != NULL) {
+            ret = count(node->left) + count(node->right) + 1;
+        }
+        return ret;
+#else // 简单写法
+        return (node != NULL) ? (count(node->left) + count(node->right) + 1) : 0;
+#endif
+    }
+
+    int height(BTreeNode<T> *node) const
+    {
+        int ret = 0;
+        if (node != NULL) {
+            int lh = height(node->left);
+            int rh = height(node->right);
+            ret = ((lh > rh) ? lh : rh) + 1;
+        }
+        return ret;
+    }
+    int degree(BTreeNode<T> *node) const
+    {
+        int ret = 0;
+        if (node != NULL) {
+#if 1 // 稍微高效一点
+            BTreeNode<T> *child[] = { node->left, node->right };
+            ret = (!!node->left + !!node->right);
+            for (int i = 0; (i < 2) && (ret < 2); i++) {
+                int d = degree(child[i]);
+                if (ret < d) {
+                    ret = d;
+                }
+            }
+#else
+            int ld = degree(node->left);
+            int rd = degree(node->right);
+
+            ret = (!!node->left + !!node->right);
+
+            if (ret < ld) {
+                ret = ld;
+            }
+            if (ret < rd) {
+                ret = rd;
+            }
+#endif
+        }
+        return ret;
+    }
 public:
     // implementation
     bool insert(TreeNode<T> *node)
@@ -236,17 +289,33 @@ public:
     }
 
     // 获取树的属性
-    int degree() const // 获取树的度
+    /*
+     *              | return 0;                                                                     node == NULL
+     * degree(node) |
+     *              | MAX{degree(node->left), degree(node->left), !!node->left + !!node->right};    node != NULL
+     *                                                                (node节点的degree)
+     */
+    int degree() const // 递归方法，获取树的度
     {
-        return 0;
+        return degree(root());
     }
-    int count() const  // 获取树的节点数
+    /*
+     *             | return 0;                                      node == NULL
+     * count(node) |
+     *             | count(node->left) + count(node->right) + 1;    node != NULL
+     */
+    int count() const  // 递归方法，获取树的节点数
     {
-        return 0;
+        return count(root());
     }
-    int height() const // 获取树的高度
+    /*
+     *              | return 0;                                         node == NULL
+     * height(node) |
+     *              | MAX{height(node->left), height(node->right)} + 1;  node != NULL
+     */
+    int height() const // 递归方法，获取树的高度
     {
-        return 0;
+        return height(root());
     }
     
     /* clear 操作注意是否对空间创建的节点 */

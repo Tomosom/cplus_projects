@@ -33,6 +33,10 @@ int main(int argc, char **argv)
     n = bt.find(6);
     bt.insert(11, n, LEFT);
 
+    cout << "count : " << bt.count() << endl;
+    cout << "height : " << bt.height() << endl;
+    cout << "root : " << bt.degree() << endl;
+
     // remove test
     SharedPointer< Tree<int> > sp = bt.remove(3);
 
