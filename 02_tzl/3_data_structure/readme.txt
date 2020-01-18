@@ -40,6 +40,8 @@
                 "${workspaceFolder}/pointer",
                 "${workspaceFolder}/pointer/shared_pointer",
                 "${workspaceFolder}/tree"
+                "${workspaceFolder}/tree/gtree",
+                "${workspaceFolder}/tree/btree"
 ],
 
 
