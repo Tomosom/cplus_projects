@@ -5,6 +5,12 @@
 
 namespace DTLib {
 
+enum BTNodePos {
+    ANY,
+    LEFT,
+    RIGHT
+};
+
 template <typename T>
 class BTreeNode : public TreeNode<T> {
 public:

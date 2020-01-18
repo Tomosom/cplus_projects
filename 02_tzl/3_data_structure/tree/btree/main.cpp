@@ -30,8 +30,8 @@ int main(int argc, char **argv)
     n = bt.find(5);
     bt.insert(10, n);
     
-    n = bt.find(6);
-    bt.insert(11, n, LEFT);
+    //n = bt.find(6);
+    //bt.insert(11, n, LEFT);
 
     cout << "count : " << bt.count() << endl;
     cout << "height : " << bt.height() << endl;
@@ -57,6 +57,7 @@ int main(int argc, char **argv)
     }
 #endif
 
+#if 0
     // 层次遍历测试
     cout << endl;
 
@@ -64,6 +65,31 @@ int main(int argc, char **argv)
         cout << bt.current() << " ";
     }
 
+    cout << endl;
+#endif
+
+    // 二叉树的典型遍历方式
+    SharedPointer< Array<int> > sp = NULL;
+    
+    sp = bt.traversal(PreOrder);
+    cout << "PreOrder  : ";
+    for(int i = 0; i < (*sp).length(); i++) {
+        cout << (*sp)[i] << " ";
+    }
+    cout << endl;
+
+    sp = bt.traversal(InOrder);
+    cout << "InOrder   : ";
+    for(int i = 0; i < (*sp).length(); i++) {
+        cout << (*sp)[i] << " ";
+    }
+    cout << endl;
+
+    sp = bt.traversal(PostOrder);
+    cout << "PostOrder : ";
+    for(int i = 0; i < (*sp).length(); i++) {
+        cout << (*sp)[i] << " ";
+    }
     cout << endl;
 
     return 0;

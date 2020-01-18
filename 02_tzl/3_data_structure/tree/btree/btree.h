@@ -14,6 +14,7 @@
 #include "tree.h"
 #include "btree_node.h"
 #include "link_queue.h"
+#include "dynamic_array.h"
 // for clear() test
 #if 0
 #include <iostream>
@@ -21,10 +22,10 @@
 
 namespace DTLib {
 
-enum BTNodePos {
-    ANY,
-    LEFT,
-    RIGHT
+enum BTTraversal {
+    PreOrder,
+    InOrder,
+    PostOrder
 };
 
 template <typename T>
@@ -192,6 +193,34 @@ protected:
         }
         return ret;
     }
+
+    void preOrderTraversal(BTreeNode<T> *node, LinkQueue<BTreeNode<T>*> &queue)
+    {
+        if (node != NULL) {
+            queue.add(node);
+            preOrderTraversal(node->left, queue);
+            preOrderTraversal(node->right, queue);
+        }
+    }
+
+    void inOrderTraversal(BTreeNode<T> *node, LinkQueue<BTreeNode<T>*> &queue)
+    {
+        if (node != NULL) {
+            inOrderTraversal(node->left, queue);
+            queue.add(node);
+            inOrderTraversal(node->right, queue);
+        }
+    }
+
+    void postOrderTraversal(BTreeNode<T> *node, LinkQueue<BTreeNode<T>*> &queue)
+    {
+        if (node != NULL) {
+            postOrderTraversal(node->left, queue);
+            postOrderTraversal(node->right, queue);
+            queue.add(node);
+        }
+    }
+
 public:
     // implementation
     bool insert(TreeNode<T> *node)
@@ -375,6 +404,93 @@ public:
         free(root());
         m_queue.clear();
         this->m_root = NULL;
+    }
+
+    /*
+     * 典型的二叉树遍历方式 (递归方法遍历)
+     *  - 先序遍历(Pre-Order Traversal)
+     *      - 二叉树为空：
+     *          无操作
+     *      - 二叉树不为空
+     *          1. 访问根节点中的数据元素 ("先"的含义是, 先访问根节点中的数据元素)
+     *          2. 先序遍历左子树
+     *          3. 先序遍历右子树
+     *      伪代码：
+     *      PreOrderTraversal(node) {
+     *          if (node != NULL) {
+     *              access(node->value);
+     *              PreOrderTraversal(node->left);
+     *              PreOrderTraversal(node->right);
+     *          }
+     *      }
+     *  - 中序遍历(In-Order Traversal)
+     *      - 二叉树为空：
+     *          无操作，直接返回
+     *      - 二叉树不为空
+     *          1. 中序遍历左子树
+     *          2. 访问根节点中的数据元素 ("中"的含义是，在中间的时候访问根节点中的数据元素)
+     *          3. 中序遍历右子树
+     *      伪代码：
+     *      InOrderTraversal(node) {
+     *          if (node != NULL) {
+     *              InOrderTraversal(node->left);
+     *              access(node->value);
+     *              InOrderTraversal(node->right);
+     *          }
+     *      }
+     * - 后序遍历(Post-Order Traversal)
+     *      - 二叉树为空：
+     *          无操作，直接返回
+     *      - 二叉树不为空
+     *          1. 后序遍历左子树
+     *          2. 后序遍历右子树
+     *          3. 访问根节点中的数据元素 ("后"的含义是，最后访问根节点中的数据元素)
+     *      伪代码：
+     *      PostOrderTraversal(node) {
+     *          if (node != NULL) {
+     *              PostOrderTraversal(node->left);
+     *              PostOrderTraversal(node->right);
+     *              access(node->value);
+     *          }
+     *      }
+     * 
+     *  用户调用示例
+     *      SharedPointer< Array<int> > sp = NULL;
+     *      sp = tree.traversal(PreOrder);
+     *      for(int i = 0; i < (*sp).length(); i++) {
+     *          cout << (*sp)[i] << endl;
+     *      }
+     */
+    SharedPointer< Array<T> > traversal(BTTraversal order)
+    {
+        DynamicArray<T> *ret = NULL;
+        LinkQueue<BTreeNode<T>*> queue; //用来保存遍历节点的次序
+
+        switch(order) {
+            case PreOrder:
+                preOrderTraversal(root(), queue);
+                break;
+            case InOrder:
+                inOrderTraversal(root(), queue);
+                break;
+            case PostOrder:
+                postOrderTraversal(root(), queue);
+                break;
+            default:
+                THROW_EXCEPTION(InvalidParameterException, "Parameter order is invalid ...");
+                break;
+        }
+
+        ret = new DynamicArray<T>(queue.length());
+        if (ret != NULL) {
+            for(int i = 0; i < ret->length(); i++, queue.remove()) {
+                ret->set(i, queue.front()->value);
+            }
+        } else {
+            THROW_EXCEPTION(NoEnoughMemoryException, "No memory to create return array ..."); 
+        }
+
+        return ret;
     }
 
     ~BTree()
