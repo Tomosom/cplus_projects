@@ -26,6 +26,7 @@
                 "${workspaceFolder}/**",
                 "${workspaceFolder}",
                 "${workspaceFolder}/exception",
+                "${workspaceFolder}/array",
                 "${workspaceFolder}/array/static_array",
                 "${workspaceFolder}/array/dynamic_array",
                 "${workspaceFolder}/list",
