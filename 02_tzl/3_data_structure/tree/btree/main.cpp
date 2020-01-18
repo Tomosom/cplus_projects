@@ -33,19 +33,25 @@ int main(int argc, char **argv)
     //n = bt.find(6);
     //bt.insert(11, n, LEFT);
 
+    SharedPointer< BTree<int> > btClone = bt.clone();
+
+#if 0
+    // 属性操作测试
     cout << "count : " << bt.count() << endl;
     cout << "height : " << bt.height() << endl;
     cout << "root : " << bt.degree() << endl;
+#endif
 
-#if 0
+#if 1
     // remove test
     SharedPointer< Tree<int> > sp = bt.remove(3);
 
     // 从叶节点开始反向打印
     int a[] = {8, 9, 10, 11, 7};
     for(int i = 0; i < 5; i++) {
-        //TreeNode<int> *node = bt.find(a[i]);
-        TreeNode<int> *node = sp->find(a[i]);
+        //TreeNode<int> *node = bt.find(a[i]);  // insert操作测试
+        //TreeNode<int> *node = sp->find(a[i]);   // remove操作测试
+        TreeNode<int> *node = btClone->find(a[i]);   // clone操作测试
 
         while(node) {
             cout << node->value << " ";
@@ -68,6 +74,7 @@ int main(int argc, char **argv)
     cout << endl;
 #endif
 
+#if 0
     // 二叉树的典型遍历方式
     SharedPointer< Array<int> > sp = NULL;
     
@@ -91,6 +98,7 @@ int main(int argc, char **argv)
         cout << (*sp)[i] << " ";
     }
     cout << endl;
+#endif
 
     return 0;
 }

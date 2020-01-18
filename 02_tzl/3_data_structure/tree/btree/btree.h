@@ -221,6 +221,33 @@ protected:
         }
     }
 
+    BTreeNode<T> *clone(BTreeNode<T> *node) const
+    {
+        BTreeNode<T> *ret = NULL;
+        if (node != NULL) {
+            ret = BTreeNode<T>::NewNode();
+            if (ret != NULL) {
+                ret->value = node->value;
+
+                ret->left = clone(node->left);
+                ret->right = clone(node->right);
+                //指定父子关系
+                if (ret->left != NULL) {
+                    ret->left->parent = ret;
+                }
+                if (ret->right != NULL) {
+                    ret->right->parent = ret;
+                }
+            } else {
+                THROW_EXCEPTION(NoEnoughMemoryException, "No memory to create new node ...");
+            }
+
+
+        }
+
+        return ret;
+    }
+
 public:
     // implementation
     bool insert(TreeNode<T> *node)
@@ -490,6 +517,31 @@ public:
             THROW_EXCEPTION(NoEnoughMemoryException, "No memory to create return array ..."); 
         }
 
+        return ret;
+    }
+
+    /* 二叉树的扩展操作 */
+    /*
+     * 二叉树的克隆操作, 递归完成
+     *      克隆当前树的一份拷贝
+     *      返回值为堆空间中的一颗新二叉树
+     * 
+     *             | return NULL;                       node = NULL
+     *             |
+     * clone(node) |
+     *             | n = NewNode();                     node != NULL
+     *             | n->value = node->value;
+     *             | n->left = clone(node->left);       
+     *             | n->right = clone(node->right);
+     */
+    SharedPointer< BTree<T> > clone() const
+    {
+        BTree<T> *ret = new BTree<T>();
+        if (ret != NULL) {
+            ret->m_root = clone(root());
+        } else {
+            THROW_EXCEPTION(NoEnoughMemoryException, "No memory to create new tree ...");
+        }
         return ret;
     }
 
