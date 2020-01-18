@@ -37,6 +37,7 @@ int main(int argc, char **argv)
     cout << "height : " << bt.height() << endl;
     cout << "root : " << bt.degree() << endl;
 
+#if 0
     // remove test
     SharedPointer< Tree<int> > sp = bt.remove(3);
 
@@ -54,6 +55,16 @@ int main(int argc, char **argv)
         cout << endl;
    
     }
+#endif
+
+    // 层次遍历测试
+    cout << endl;
+
+    for (bt.begin(); !bt.end(); bt.next()) {
+        cout << bt.current() << " ";
+    }
+
+    cout << endl;
 
     return 0;
 }

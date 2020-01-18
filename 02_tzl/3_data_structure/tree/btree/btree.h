@@ -13,7 +13,7 @@
 
 #include "tree.h"
 #include "btree_node.h"
-
+#include "link_queue.h"
 // for clear() test
 #if 0
 #include <iostream>
@@ -30,6 +30,9 @@ enum BTNodePos {
 template <typename T>
 class BTree : public Tree<T> {
 protected:
+    /* 层次遍历所需队列 */
+    LinkQueue<BTreeNode<T>*> m_queue;
+
     virtual BTreeNode<T> *find(BTreeNode<T> *node, const T &value) const
     {
         BTreeNode<T> *ret = NULL;
@@ -247,6 +250,7 @@ public:
             THROW_EXCEPTION(InvalidParameterException, "Can not find the tree node via value ...");
         } else {
             remove(node, ret);
+            m_queue.clear();
         }
 
         return ret;
@@ -260,6 +264,7 @@ public:
             THROW_EXCEPTION(InvalidParameterException, "Parameter node is invalid ...");
         } else {
             remove(dynamic_cast<BTreeNode<T>*>(node), ret);
+            m_queue.clear();
         }
 
         return ret;
@@ -318,6 +323,47 @@ public:
         return height(root());
     }
     
+#if 1
+    // 树形结构的层次遍历 相关函数
+    bool begin() // 初始化，准备进行遍历访问
+    {
+        bool ret = (root() != NULL);
+        if (ret) {
+            m_queue.clear();
+            m_queue.add(root());
+        }
+        return ret;
+    }
+    bool end() // 判断游标是否达到尾部
+    {
+        return (m_queue.length() == 0);
+    }
+    bool next() // 移动游标，指向下一个节点
+    {
+        bool ret = (m_queue.length() > 0);
+        if (ret) {
+            BTreeNode<T> *node = m_queue.front();
+            m_queue.remove();
+            if (node->left != NULL) {
+                m_queue.add(node->left);
+            }
+            if (node->right != NULL) {
+                m_queue.add(node->right);
+            }
+        }
+
+        return ret;
+    }
+    T current() // 获取游标所指定的数据元素
+    {
+        if (!end()) {
+            return m_queue.front()->value;
+        } else {
+            THROW_EXCEPTION(InvalidOperationException, "No value at current position ...");
+        }
+    }
+#endif
+
     /* clear 操作注意是否对空间创建的节点 */
     /*
      *            | return ;                                            node == NULL
@@ -327,6 +373,7 @@ public:
     void clear()       // 递归方法，清空树中的元素
     {
         free(root());
+        m_queue.clear();
         this->m_root = NULL;
     }
 

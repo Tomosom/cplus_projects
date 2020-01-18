@@ -276,18 +276,6 @@ public:
     }
 #if 1
     // 树形结构的层次遍历 相关函数
-    /*
-     * 设计思路：
-     * - 在树中定义一个游标( GTreeNode<T>* ) 
-     * - 遍历开始前将游标指向根节点( root() )
-     * - 获取游标指向的数据元素
-     * - 通过节点中的child成员移动游标
-     * 
-     * 使用：
-     * for (tree.begin(); !tree.end(); tree.next()) {
-     *     tree.current();
-     * }
-     */
     bool begin() // 初始化，准备进行遍历访问
     {
         bool ret = (root() != NULL);
