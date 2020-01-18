@@ -3,6 +3,11 @@
 using namespace std;
 
 // 求前N个数相加
+/*
+ *        | n + sum(n - 1)      n > 1
+ * sun(n) |
+ *        | 1                   n == 1
+ */
 unsigned int sum(unsigned int n)
 {
     if (n > 1) {
@@ -13,6 +18,13 @@ unsigned int sum(unsigned int n)
 }
 
 // 求斐波那契数列
+/*
+ *        | fac(n - 1) + fac(n - 2)     n >= 3
+ *        |
+ * fac(n) | 1                           n == 2
+ *        |
+ *        | 1                           n == 1
+ */
 unsigned int fac(unsigned int n)
 {
     if (n > 2) {
@@ -25,6 +37,11 @@ unsigned int fac(unsigned int n)
 }
 
 // 一条语句实现strlen的由来
+/*
+ *           | 1 + strlen(s + 1)    *s != '\0'
+ * strlen(s) |
+ *           | 0                    *s == '\0'
+ */
 unsigned int _strlen(const char *s)
 {
 #if 0

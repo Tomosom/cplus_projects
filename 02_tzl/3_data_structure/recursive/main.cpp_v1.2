@@ -4,6 +4,19 @@
 
 using namespace std;
 
+/*
+ *          |               |               |
+ *          |               |               |
+ *          |               |               |
+ *      ---------       ---------       ---------
+ *          A               B               C
+ *
+ * 汉诺塔问题分解
+ * - 将 n - 1 个木块借助C柱由A柱移动到B柱
+ * - 将最底层的唯一木块直接移动到C柱
+ * - 将n - 1个木块借助A柱由B柱移动到C柱
+ */
+
 // 打印出移动的步数
 void HanoiTower(int n, char a, char b, char c) // a==>src, b==>middle c==>dest
 {

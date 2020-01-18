@@ -5,6 +5,11 @@
 
 using namespace std;
 
+/*
+ *                | 找到n - 1个元素全排列的方法，就能找得到n个元素的全排列  n > 2
+ * permutation(n) |
+ *                | 1个元素的全排列为自身                                n == 1
+ */
 void permutation(char *s, char *e)
 {
     if (*s == '\0') {

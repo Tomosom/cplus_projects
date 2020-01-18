@@ -327,18 +327,22 @@ public:
     }
     
     /*
-     *                   | return node;                                             node->value == value
+     *                   | return node;                     node->value == value
      * find(node, value) |
-     *                   | find(node->left, value); or find(node->right, value);    node->value != value
+     *                   | find(node->left, value);         node->value != value
+     *                   | or
+     *                   | find(node->right, value);
      */
     BTreeNode<T> *find(const T &value) const // 递归方法进行查找
     {
         return find(root(), value);
     }
     /*
-     *                 | return node;                                         node == obj
+     *                 | return node;               node == obj
      * find(node, obj) |
-     *                 | find(node->left, obj); or find(node->right, obj);    node != obj
+     *                 | find(node->left, obj);     node != obj
+     *                 | or
+     *                 | find(node->right, obj);    
      */
     BTreeNode<T> *find(TreeNode<T> *node) const // 递归方法进行查找
     {
@@ -351,10 +355,12 @@ public:
 
     // 获取树的属性
     /*
-     *              | return 0;                                                                     node == NULL
+     *              | return 0;                                                 node == NULL
      * degree(node) |
-     *              | MAX{degree(node->left), degree(node->left), !!node->left + !!node->right};    node != NULL
-     *                                                                (node节点的degree)
+     *              | MAX{ degree(node->left),
+     *                     degree(node->left), 
+     *                     !!node->left + !!node->right(node节点的degree) };    node != NULL
+     *                                                                
      */
     int degree() const // 递归方法，获取树的度
     {
@@ -527,7 +533,6 @@ public:
      *      返回值为堆空间中的一颗新二叉树
      * 
      *             | return NULL;                       node = NULL
-     *             |
      * clone(node) |
      *             | n = NewNode();                     node != NULL
      *             | n->value = node->value;
@@ -543,6 +548,32 @@ public:
             THROW_EXCEPTION(NoEnoughMemoryException, "No memory to create new tree ...");
         }
         return ret;
+    }
+
+    /* 
+     * 二叉树的比较操作:
+     *  判断两颗二叉树中的数据元素是否对应相等
+     * 
+     * 定义功能:equal(lh, rh)
+     *  判断lh为根节点的二叉树与rh为根节点的二叉树是否相等
+     * 
+     *               | return true;                     lh == rh
+     *               |
+     *               | return false;                    lh == 0 && rh != 0
+     *               |
+     *               | return false;                    lh != 0 && rh == 0
+     * equal(lh, rh) |
+     *               | lh->value == rh->value &&        lh != 0 && rh != 0
+     *               | equal(lh->left, rh->left) &&
+     *               | equal(lh->right, rh->right)
+     */
+    bool operator == (const BTree<T> &btree)
+    {
+        return 0;
+    }
+    bool operator != (const BTree<T> &btree)
+    {
+        return 0;
     }
 
     ~BTree()

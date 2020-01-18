@@ -92,6 +92,12 @@ Node *merge(Node *list1, Node *list2)
 }
 
 // 逆序打印单链表中的偶数节点
+/*
+ *                    | r_print_even(list->next);   list != NULL
+ *                    | print(list->value);
+ * r_print_even(list) |
+ *                    | return                      list == NULL
+ */
 void r_print_even(Node *list)
 {
     if (list != NULL) {

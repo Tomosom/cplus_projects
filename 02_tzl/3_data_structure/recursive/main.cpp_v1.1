@@ -49,6 +49,16 @@ void print_list(Node *list)
 }
 
 // 单链表递归转置
+/*
+ *               | guard = list->next;          len(list) >= 2
+ *               | ret = reverse(list->next);
+ *               | guard->next = list;
+ *               | list->next = NULL;
+ *               |
+ * reverse(list) | list                         len(list) == 1
+ *               |
+ *               | NULL                         list == NULL
+ */
 Node *reverse(Node *list)
 {
     if ((list == NULL) || (list->next == NULL)) {
@@ -64,6 +74,18 @@ Node *reverse(Node *list)
 }
 
 // 单向已排好序的链表的合并，合并后仍是单向有序的
+/*
+ *          | list2     list1 == NULL
+ * 递归出口：| 
+ *          | list1     list2 == NULL
+ *
+ *
+ *          |   if (list1->value < list2->value)
+ *          |         list1->next = merge(list1->next, list2)
+ * 递归分解：|
+ *          |   if (list1->value >= list2->value)
+ *          |       list2->value = merge(list1, list2->next)
+ */
 Node *merge(Node *list1, Node *list2)
 {
     if (list1 == NULL) {

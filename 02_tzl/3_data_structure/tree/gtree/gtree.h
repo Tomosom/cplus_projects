@@ -223,10 +223,26 @@ public:
         return ret;
     }
 
+    /*
+     * 定义功能：find(node, value)
+     * - 在node为根节点的树中查找value所在的节点
+     * 
+     *                   | return node;                 node->value == value
+     * find(node, value) |
+     *                   | find(node->child, value);    node->value != value
+     */
     GTreeNode<T> *find(const T &value) const // 以值的方式查找
     {
         return find(root(), value);
     }
+    /*
+     * 定义功能：find(node, obj)
+     * - 在node为根节点的树中查找是否存在obj节点
+     * 
+     *                 | return node;               node == obj
+     * find(node, obj) |
+     *                 | find(node->child, obj);    node != obj
+     */
     GTreeNode<T> *find(TreeNode<T> *node) const // 以节点的方式查找
     {
         return find(root(), dynamic_cast<GTreeNode<T> *>(node));
@@ -240,7 +256,8 @@ public:
     /*
      *               | return 0;                                        node == NULL
      *  degree(node) |
-     *               | MAX{ degree(node->child), node->child.length) }; node != NULL
+     *               | MAX{ degree(node->child),
+     *                      node->child.length) }; node != NULL
      */
     int degree() const // 递归方法，获取树的度, 结点拥有的子树数目成为结点的度，树的度定义为所有结点中度的最大值
     {
@@ -249,7 +266,9 @@ public:
 
     /*
      *             | return 0;                 node == NULL
+     *             |
      * count(node) | return 1;                 node->child.length == 0
+     *             |
      *             | count(node->child) + 1;   node->child.length > 0
      */
     int count() const  // 递归方法，获取树的节点数
@@ -259,7 +278,9 @@ public:
 
     /*
      *              | return 0;                            node == NULL
+     *              |
      * height(node) | return 1;                            node->child.length == 0
+     *              |
      *              | return MAX{height(node->child)} + 1; node->child.length > 0
      */
     int height() const // 递归方法，获取树的高度
@@ -268,6 +289,16 @@ public:
     }
 
     // 清空树中的元素
+    /*
+     * free(node)
+     * - 清除node为根节点的树
+     * - 释放树中的每一个节点
+     * 
+     *            | return;             node == NULL
+     * free(node) |
+     *            | free(node->child);  node != NULL
+     *            | delete node;
+     */
     void clear()
     {
         free(root());
