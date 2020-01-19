@@ -49,3 +49,13 @@ git push -u origin master
 	$ git config --global color.diff auto
 	$ git config --global color.branch auto
 	$ git config --global color.interactive auto
+
+无法连接github网站解决方法:
+进入windows下路径为：C:\Windows\System32\drivers\etc\hosts
+在hosts文件中加入下列IP，保存即可生效
+#github
+192.30.253.113 github.com
+192.30.253.113 github.com
+192.30.253.118 gist.github.com
+192.30.253.119 gist.github.com
+Linux下路径：/etc/hosts
