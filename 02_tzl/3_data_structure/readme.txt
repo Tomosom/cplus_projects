@@ -40,7 +40,7 @@
                 "${workspaceFolder}/stack_and_queue/stack/static_stack",
                 "${workspaceFolder}/pointer",
                 "${workspaceFolder}/pointer/shared_pointer",
-                "${workspaceFolder}/tree"
+                "${workspaceFolder}/tree",
                 "${workspaceFolder}/tree/gtree",
                 "${workspaceFolder}/tree/btree"
 ],
