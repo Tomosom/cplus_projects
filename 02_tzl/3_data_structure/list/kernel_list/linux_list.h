@@ -6,8 +6,13 @@
 // #include <linux/poison.h>
 // #include <linux/prefetch.h>
 
+#if 0
 #ifndef offsetof
 #define offsetof(TYPE, MEMBER) ((size_t) &((TYPE *)0)->MEMBER)
+#endif
+#else
+#undef offsetof
+#define offsetof(TYPE, MEMBER) (((size_t)&((TYPE*)1)->MEMBER) - 1)
 #endif
 
 #ifndef container_of
