@@ -248,6 +248,17 @@ protected:
         return ret;
     }
 
+    bool equal(BTreeNode<T> *lh, BTreeNode<T> *rh) const
+    {
+        if (lh == rh) {
+            return true;
+        } else if ((lh != NULL) && (rh != NULL)) {
+            return (lh->value == rh->value) && equal(lh->left, rh->left) && equal(lh->right, rh->right);
+        } else {
+            return false;
+        }
+    }
+
 public:
     // implementation
     bool insert(TreeNode<T> *node)
@@ -569,11 +580,11 @@ public:
      */
     bool operator == (const BTree<T> &btree)
     {
-        return 0;
+        return equal(root(), btree.root());
     }
     bool operator != (const BTree<T> &btree)
     {
-        return 0;
+        return !(*this == btree);
     }
 
     ~BTree()

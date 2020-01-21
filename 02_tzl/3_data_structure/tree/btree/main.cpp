@@ -33,7 +33,10 @@ int main(int argc, char **argv)
     //n = bt.find(6);
     //bt.insert(11, n, LEFT);
 
+#if 1
+    // clone test
     SharedPointer< BTree<int> > btClone = bt.clone();
+#endif
 
 #if 0
     // 属性操作测试
@@ -45,9 +48,12 @@ int main(int argc, char **argv)
 #if 1
     // remove test
     SharedPointer< Tree<int> > sp = bt.remove(3);
+#endif
 
+#if 1
     // 从叶节点开始反向打印
-    int a[] = {8, 9, 10, 11, 7};
+    // int a[] = {8, 9, 10, 11, 7};
+    int a[] = {8, 9, 10, 7};
     for(int i = 0; i < 5; i++) {
         //TreeNode<int> *node = bt.find(a[i]);  // insert操作测试
         //TreeNode<int> *node = sp->find(a[i]);   // remove操作测试
@@ -62,6 +68,13 @@ int main(int argc, char **argv)
    
     }
 #endif
+
+#if 1
+    // 比较操作符测试
+    cout << "compare : " << (bt != *btClone) << endl;
+
+#endif
+
 
 #if 0
     // 层次遍历测试
