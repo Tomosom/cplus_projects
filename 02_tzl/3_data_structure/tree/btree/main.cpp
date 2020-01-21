@@ -33,7 +33,7 @@ int main(int argc, char **argv)
     //n = bt.find(6);
     //bt.insert(11, n, LEFT);
 
-#if 1
+#if 0
     // clone test
     SharedPointer< BTree<int> > btClone = bt.clone();
 #endif
@@ -45,12 +45,12 @@ int main(int argc, char **argv)
     cout << "root : " << bt.degree() << endl;
 #endif
 
-#if 1
+#if 0
     // remove test
     SharedPointer< Tree<int> > sp = bt.remove(3);
 #endif
 
-#if 1
+#if 0
     // 从叶节点开始反向打印
     // int a[] = {8, 9, 10, 11, 7};
     int a[] = {8, 9, 10, 7};
@@ -69,7 +69,7 @@ int main(int argc, char **argv)
     }
 #endif
 
-#if 1
+#if 0
     // 比较操作符测试
     cout << "compare : " << (bt != *btClone) << endl;
 
@@ -112,6 +112,46 @@ int main(int argc, char **argv)
     }
     cout << endl;
 #endif
+
+    // 二叉树相加操作测试
+    BTree<int> nbt;
+    nbt.insert(0, NULL);
+
+    n = nbt.find(0);
+    nbt.insert(6, n);
+    nbt.insert(2, n);
+
+    n = nbt.find(2);
+    nbt.insert(7, n);
+    nbt.insert(8, n);
+    
+    SharedPointer< BTree<int> > r = bt.add(nbt);
+
+    // 从叶节点开始反向打印
+    // int a[] = {8, 9, 10, 11, 7};
+    int a[] = {8, 9, 10, 13, 5};
+
+    cout << "add result : " << endl;
+    for(int i = 0; i < 5; i++) {
+        TreeNode<int> *node = r->find(a[i]);
+
+        while(node) {
+            cout << node->value << " ";
+            node = node->parent;
+        }
+
+        cout << endl;
+   
+    }
+
+    // 先序遍历
+    cout << "preorder : ";
+    SharedPointer< Array<int> > tr = r->traversal(PreOrder);
+
+    for (int i = 0; i < tr->length(); i++) {
+        cout << (*tr)[i] << " ";
+    }
+    cout << endl;
 
     return 0;
 }

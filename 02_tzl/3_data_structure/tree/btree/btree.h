@@ -259,6 +259,35 @@ protected:
         }
     }
 
+    BTreeNode<T> *add(BTreeNode<T> *lh, BTreeNode<T> *rh) const
+    {
+        BTreeNode<T> *ret = NULL;
+
+        if ((lh == NULL) && (rh != NULL)) {
+            ret = clone(rh);
+        } else if ((lh != NULL) && (rh == NULL)) {
+            ret = clone(lh);
+        } else if ((lh != NULL) && (rh != NULL)) {
+            ret = BTreeNode<T>::NewNode();
+            if (ret != NULL) {
+                ret->value = lh->value + rh->value;
+                ret->left = add(lh->left, rh->left);
+                ret->right = add(lh->right, rh->right);
+
+                if (ret->left != NULL) {
+                    ret ->left->parent = ret;
+                }
+                
+                if (ret->right != NULL) {
+                    ret ->right->parent = ret;
+                }
+            } else {
+                THROW_EXCEPTION(NoEnoughMemoryException, "No memory to create new node ...");
+            }
+        }
+        return ret;
+    }
+
 public:
     // implementation
     bool insert(TreeNode<T> *node)
@@ -585,6 +614,33 @@ public:
     bool operator != (const BTree<T> &btree)
     {
         return !(*this == btree);
+    }
+
+    /*
+     * 二叉树的相加操作，递归完成
+     * 将当前二叉树与参数btree中的数据元素在对应位置处相加
+     * 返回值(相加的结果)为堆空间中的一颗新二叉树
+     * 定义功能：add(lh, rh)
+     *  将lh为根节点的二叉树与rh为根节点的二叉树相加
+     * 
+     *             | clone(rh);                             lh == 0 && rh != 0
+     *             |
+     *             | clone(lh);                             lh != 0 && rh == 0
+     * add(lh, rh) |
+     *             | n = NewNode();                         lh != 0 && rh != 0
+     *             | n->value = lh->value + rh->value
+     *             | n->left = add(lh->left, rh->left);
+     *             | n->right = add(lh->right, rh->right);
+     */
+    SharedPointer< BTree<T> > add(const BTree<T> &btree) const
+    {
+        BTree<T> *ret = new BTree<T>();
+        if (ret != NULL) {
+            ret->m_root = add(root(), btree.root());
+        } else {
+            THROW_EXCEPTION(NoEnoughMemoryException, "No memory to create new tree ...");
+        }
+        return ret;
     }
 
     ~BTree()
