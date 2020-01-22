@@ -87,7 +87,7 @@ int main(int argc, char **argv)
     cout << endl;
 #endif
 
-#if 0
+#if 1
     // 二叉树的典型遍历方式
     SharedPointer< Array<int> > sp = NULL;
     
@@ -111,8 +111,37 @@ int main(int argc, char **argv)
         cout << (*sp)[i] << " ";
     }
     cout << endl;
+
+    sp = bt.traversal(LevelOrder);
+    cout << "LevelOrder : ";
+    for(int i = 0; i < (*sp).length(); i++) {
+        cout << (*sp)[i] << " ";
+    }
+    cout << endl;
 #endif
 
+#if 1
+    // 二叉树线索化测试
+    
+    //BTreeNode<int> *head = bt.thread(PreOrder);
+    //BTreeNode<int> *head = bt.thread(InOrder);
+    //BTreeNode<int> *head = bt.thread(PostOrder);
+    BTreeNode<int> *head = bt.thread(LevelOrder);
+    cout << "thread : ";
+
+    while(head->right != NULL) { // 反向打印
+        head = head->right;
+    }
+
+    while(head != NULL) {
+        cout << head->value << " ";
+        //head = head->right;
+        head = head->left;
+    }
+    cout << endl;
+#endif
+
+#if 0
     // 二叉树相加操作测试
     BTree<int> nbt;
     nbt.insert(0, NULL);
@@ -152,6 +181,7 @@ int main(int argc, char **argv)
         cout << (*tr)[i] << " ";
     }
     cout << endl;
+#endif
 
     return 0;
 }

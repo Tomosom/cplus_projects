@@ -22,10 +22,12 @@
 
 namespace DTLib {
 
+/* 四种遍历方式 */
 enum BTTraversal {
     PreOrder,
     InOrder,
-    PostOrder
+    PostOrder,
+    LevelOrder  //  添加层次遍历
 };
 
 template <typename T>
@@ -221,6 +223,29 @@ protected:
         }
     }
 
+    void levelOrderTraversal(BTreeNode<T> *node, LinkQueue<BTreeNode<T>*> &queue)
+    {
+        if (node != NULL) {
+            LinkQueue<BTreeNode<T>*> tmp; // 辅助队列
+            tmp.add(node);
+
+            while(tmp.length() > 0) {
+                BTreeNode<T> *n = tmp.front();
+                
+                if (n->left != NULL) {
+                    tmp.add(n->left);
+                }
+
+                if (n->right != NULL) {
+                    tmp.add(n->right);
+                }
+
+                tmp.remove();
+                queue.add(n);
+            }
+        }
+    }
+
     BTreeNode<T> *clone(BTreeNode<T> *node) const
     {
         BTreeNode<T> *ret = NULL;
@@ -285,6 +310,54 @@ protected:
                 THROW_EXCEPTION(NoEnoughMemoryException, "No memory to create new node ...");
             }
         }
+        return ret;
+    }
+
+    void traversal(BTTraversal order, LinkQueue<BTreeNode<T>*> &queue)
+    {
+        switch(order) {
+            case PreOrder:
+                preOrderTraversal(root(), queue);
+                break;
+            case InOrder:
+                inOrderTraversal(root(), queue);
+                break;
+            case PostOrder:
+                postOrderTraversal(root(), queue);
+                break;
+            case LevelOrder:
+                levelOrderTraversal(root(), queue);
+                break;
+            default:
+                THROW_EXCEPTION(InvalidParameterException, "Parameter order is invalid ...");
+                break;
+        }
+    }
+
+    /* 将二叉树中的二叉树节点连接成双向链表，返回双向链表的首节点地址 */
+    BTreeNode<T> *connect(LinkQueue<BTreeNode<T>*> &queue)
+    {
+        BTreeNode<T> *ret = NULL;
+
+        if (queue.length() > 0) {
+            ret = queue.front();
+
+            BTreeNode<T> *slider = queue.front();
+
+            queue.remove();
+
+            slider->left = NULL;
+
+            while(queue.length() > 0) {
+                slider->right = queue.front();
+                queue.front()->left = slider;
+                slider = queue.front();
+                queue.remove();
+            }
+
+            slider->right = NULL;
+        }
+
         return ret;
     }
 
@@ -466,7 +539,7 @@ public:
     }
 #endif
 
-    /* clear 操作注意是否对空间创建的节点 */
+    /* clear操作, 注意是否对空间创建的节点 */
     /*
      *            | return ;                                            node == NULL
      * free(node) | 
@@ -539,20 +612,7 @@ public:
         DynamicArray<T> *ret = NULL;
         LinkQueue<BTreeNode<T>*> queue; //用来保存遍历节点的次序
 
-        switch(order) {
-            case PreOrder:
-                preOrderTraversal(root(), queue);
-                break;
-            case InOrder:
-                inOrderTraversal(root(), queue);
-                break;
-            case PostOrder:
-                postOrderTraversal(root(), queue);
-                break;
-            default:
-                THROW_EXCEPTION(InvalidParameterException, "Parameter order is invalid ...");
-                break;
-        }
+        traversal(order, queue);
 
         ret = new DynamicArray<T>(queue.length());
         if (ret != NULL) {
@@ -640,6 +700,40 @@ public:
         } else {
             THROW_EXCEPTION(NoEnoughMemoryException, "No memory to create new tree ...");
         }
+        return ret;
+    }
+
+    // 二叉树的线索化实现
+    /*
+     * 功能：
+     *  将二叉树转换为双向链表的过程(非线性->线性)
+     *  能够反映耨中二叉树的遍历次序(节点的先后访问次序)
+     *      利用节点的right指针指向遍历中的后继节点
+     *      利用节点的left指针指向遍历中的前驱节点
+     * 工程背景：
+     *  在实际的工程开发里面，大多数情况下，二叉树一旦建立后就不会轻易改动了，这样的二叉树主要用于遍历。
+     *  遍历操作执行的很多，前面实现的先序、中序、后序均是递归实现(递归的效率是比较低的)。
+     *  因此就把遍历的结果保存下来，下次遍历时直接用这个结果。
+     * 
+     * 函数接口说明：
+     *  根据参数order选择线索化的次序(先序，中序，后序，层次)
+     *  返回值线索化之后指向链表首节点的指针
+     *  线索化执行结束之后对应的二叉树变为空树
+     */
+    BTreeNode<T> *thread(BTTraversal order)
+    {
+        BTreeNode<T> *ret = NULL;
+
+        LinkQueue<BTreeNode<T>*> queue;
+
+        traversal(order, queue);
+
+        ret = connect(queue);
+
+        this->m_root = NULL;
+
+        m_queue.clear();
+
         return ret;
     }
 
