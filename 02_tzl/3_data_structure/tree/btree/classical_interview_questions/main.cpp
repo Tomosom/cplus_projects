@@ -66,8 +66,8 @@ void printInOrder(BTreeNode<T> *node)
  *      编写一个函数用于删除二叉树中的所有单度节点
  *      要求：节点删除后，其唯一的子节点代替它的位置
  * 
- *  思路：递归实现
- *  定义功能：delOdd1(node) ---> 二叉树中包含指向父节点的指针
+ *  思路：递归实现 ---> 二叉树中包含指向父节点的指针
+ *  定义功能：delOdd1(node)
  *      删除node为根节点的二叉树中的单度节点
  * 
  *               | return;                          node == NULL
@@ -114,7 +114,46 @@ BTreeNode<T> *delOdd1(BTreeNode<T> *node)
     return ret;
 }
 
+/*
+ * question 1:
+ * - 单度节点删除
+ *      编写一个函数用于删除二叉树中的所有单度节点
+ *      要求：节点删除后，其唯一的子节点代替它的位置
+ * 
+ *  思路：递归实现 ---> 二叉树中不包含指向父节点的指针，仅包含左右孩子指针
+ *  定义功能：delOdd2(node) // node为节点指针的引用
+ *      删除node为根节点的二叉树中的单度节点
+ * 
+ *               | return;                          node == NULL
+ *               |
+ *               | (伪码描述)
+ *               | node = node->child;              degree == 1
+ * delOdd2(node) | delOdd2(node);
+ *               | 
+ *               | delOdd2(node->left);             degree == 0 or degree == 2
+ *               | delOdd2(node->right);
+ */
+template <typename T>
+void delOdd2(BTreeNode<T> *&node)
+{
+    if (node != NULL) {
+        if (((node->left != NULL) && (node->right == NULL)) ||
+            ((node->left == NULL) && (node->right != NULL)) ) {
+            BTreeNode<T> *node_child = (node->left != NULL) ? node->left : node->right;
 
+            if (node->flag()) { // 若是堆空间创建的
+                delete node;
+            }
+
+            node = node_child;
+
+            delOdd2(node);
+        } else {
+            delOdd2(node->left);
+            delOdd2(node->right);
+        }
+    }
+}
 
 int main(int argc, char **argv)
 {
@@ -124,12 +163,14 @@ int main(int argc, char **argv)
 
     cout << endl;
 
+#if 0
+    // delOdd1 test
     ns = delOdd1(ns);
 
     printInOrder(ns);
 
     cout << endl;
-
+    
     int a[] = {6, 7, 8};
     for (int i = 0; i < 3; i++) {
         TreeNode<int> *n = ns +a[i];
@@ -140,6 +181,16 @@ int main(int argc, char **argv)
         cout << endl;
     }
     cout << endl;
+#endif
+
+#if 1
+    // delOdd2 test
+    delOdd2(ns);
+
+    printInOrder(ns);
+
+    cout << endl;
+#endif
 
     return 0;
 }
