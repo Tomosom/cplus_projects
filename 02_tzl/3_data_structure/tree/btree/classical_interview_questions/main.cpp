@@ -59,9 +59,9 @@ void printInOrder(BTreeNode<T> *node)
 }
 
 template < typename T >
-void printDualList(BTreeNode<T>* node)
+void printDualList(BTreeNode<T> *node)
 {
-    BTreeNode<T>* g = node;
+    BTreeNode<T> *g = node;
 
     cout << "head -> tail: " << endl;
 
@@ -84,6 +84,7 @@ void printDualList(BTreeNode<T>* node)
     }
 
     cout << endl;
+
 }
 
 #endif
@@ -237,6 +238,71 @@ BTreeNode<T> *inOrderThread1(BTreeNode<T> *node)
     return node;
 }
 
+/*
+ * question 2:
+ * - 中序线索化二叉树
+ *      编写一个函数用于中序线索化二叉树
+ *      要求：不允许使用其他数据结构 (之前是使用了队列来进行转化)
+ * 
+ * 思路二：不使用中序遍历的方式，因中序遍历的节点次序正好是节点的水平次序
+ *  使用辅助指针，指向转换后双向链表的头节点和尾节点
+ *  根节点与左右子树转换的双线链表连接，成为完整双向链表
+ * 
+ * 定义功能：InOrderThread(node, head, tail)
+ *  node : 根节点，也是中序访问的节点
+ *  head : 转换成功后指向双向链表的首节点
+ *  tail : 转换成功后指向双链表的尾节点 
+ * 
+ *                                | return;                             node == NULL
+ *                                |
+ * inOrderThread(node, head, pre) | inOrderThread(node->left, h, t);    node != NULL
+ *                                | node->left = t;
+ *                                | t->right = node;
+ *                                | inOrderThread(node->right, h, t);
+ *                                | node->right = h;
+ *                                | h->left = node;
+ */
+template <typename T>
+void inOrderThread(BTreeNode<T> *node, BTreeNode<T> *&head, BTreeNode<T> *&tail)
+{
+    if (node != NULL) {
+        BTreeNode<T> *h = NULL;
+        BTreeNode<T> *t = NULL;
+
+        inOrderThread(node->left, h, t);
+
+        node->left = t;
+
+        if (t != NULL) {
+            t->right = node;
+        }
+
+        head = (h != NULL) ? h : node;
+
+        h = NULL;
+        t = NULL;
+        inOrderThread(node->right, h, t);
+        
+        node->right = h;
+
+        if (h != NULL) {
+            h->left = node;
+        }
+
+        tail = (t != NULL) ? t : node;
+    }
+}
+
+template <typename T>
+BTreeNode<T> *inOrderThread2(BTreeNode<T> *node)
+{
+    BTreeNode<T> *head = NULL;
+    BTreeNode<T> *tail = NULL;
+
+    inOrderThread(node, head, tail);
+
+    return head;
+}
 
 int main(int argc, char **argv)
 {
@@ -266,7 +332,7 @@ int main(int argc, char **argv)
     cout << endl;
 #endif
 
-#if 1
+#if 0
     // delOdd2 test
     delOdd2(ns);
 
@@ -275,9 +341,19 @@ int main(int argc, char **argv)
     cout << endl;
 #endif
 
+#if 0
+    // inOrderThread1 test
     ns = inOrderThread1(ns);
 
     printDualList(ns);
+#endif
+
+#if 1
+    // inOrderThread2 test
+    ns = inOrderThread2(ns);
+
+    printDualList(ns);
+#endif
 
     return 0;
 }
