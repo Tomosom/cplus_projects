@@ -58,6 +58,34 @@ void printInOrder(BTreeNode<T> *node)
     }
 }
 
+template < typename T >
+void printDualList(BTreeNode<T>* node)
+{
+    BTreeNode<T>* g = node;
+
+    cout << "head -> tail: " << endl;
+
+    while( node != NULL ) {
+        cout << node->value << " ";
+
+        g = node;
+
+        node = node->right;
+    }
+
+    cout << endl;
+
+    cout << "tail -> head: " << endl;
+
+    while( g != NULL ) {
+        cout << g->value << " ";
+
+        g = g->left;
+    }
+
+    cout << endl;
+}
+
 #endif
 
 /*
@@ -155,6 +183,61 @@ void delOdd2(BTreeNode<T> *&node)
     }
 }
 
+/*
+ * question 2:
+ * - 中序线索化二叉树
+ *      编写一个函数用于中序线索化二叉树
+ *      要求：不允许使用其他数据结构 (之前是使用了队列来进行转化)
+ * 
+ * 思路一：在中序遍历的同时进行线索化
+ *  使用辅助指针，在中序遍历时指向当前节点的前驱节点
+ *  访问当前节点时，连接与前驱节点的先后次序
+ * 
+ * 定义功能：InOrderThread(node, pre)
+ *  node : 根节点，也是中序访问的节点
+ *  pre  : 为中序遍历时的前驱节点指针
+ * 
+ *                          | return;                           node == NULL
+ *                          |
+ * inOrderThread(node, pre) | inOrderThread(node->left, pre);   node != NULL
+ *                          | node->left = pre;
+ *                          | pre->right = node;
+ *                          | pre = node;
+ *                          | inOrderThread(node->right, pre);
+ */
+template <typename T>
+void inOrderThread(BTreeNode<T> *node, BTreeNode<T> *&pre)
+{
+    if (node != NULL) {
+        inOrderThread(node->left, pre);
+        node->left = pre;
+
+        if (pre != NULL) {
+            pre->right = node;
+        }
+
+        pre = node;
+
+        inOrderThread(node->right, pre);
+    }
+}
+
+
+template <typename T>
+BTreeNode<T> *inOrderThread1(BTreeNode<T> *node)
+{
+    BTreeNode<T> *pre = NULL;
+
+    inOrderThread(node, pre);
+
+    while((node != NULL) && (node->left != NULL)) {
+        node = node->left;
+    }
+
+    return node;
+}
+
+
 int main(int argc, char **argv)
 {
     BTreeNode<int> *ns = createTree<int>();
@@ -191,6 +274,10 @@ int main(int argc, char **argv)
 
     cout << endl;
 #endif
+
+    ns = inOrderThread1(ns);
+
+    printDualList(ns);
 
     return 0;
 }
