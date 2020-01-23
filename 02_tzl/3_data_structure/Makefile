@@ -19,6 +19,7 @@ SUBDIRS = ./array/static_array \
           ./tree \
           ./tree/gtree \
           ./tree/btree \
+          ./graph \
 
 MAKEFLAGS = --no-print-directory
 
