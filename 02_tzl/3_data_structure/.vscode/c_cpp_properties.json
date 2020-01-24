@@ -25,7 +25,8 @@
                 "${workspaceFolder}/tree/gtree",
                 "${workspaceFolder}/tree/btree",
                 "${workspaceFolder}/graph",
-                "${workspaceFolder}/graph/matrix_graph"
+                "${workspaceFolder}/graph/matrix_graph",
+                "${workspaceFolder}/graph/link_graph"
             ],
             "defines": [
                 "_DEBUG",

@@ -21,6 +21,7 @@ SUBDIRS = ./array/static_array \
           ./tree/btree \
           ./graph \
           ./graph/matrix_graph \
+          ./graph/link_graph \
 
 MAKEFLAGS = --no-print-directory
 
