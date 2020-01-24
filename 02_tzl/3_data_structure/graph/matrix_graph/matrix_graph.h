@@ -91,8 +91,10 @@ public:
                 THROW_EXCEPTION(NoEnoughMemoryException, "No memory to store new vertex value ...");
             }
         }
+
+        return ret;
     }
-    /* 获取邻接顶点(通过邻接矩阵，获取邻接顶点的编号) */
+    /* 获取邻接顶点(通过邻接矩阵中对应的行，获取邻接顶点的编号) */
     SharedPointer< Array<int> > getAdjacent(int i)
     {
         DynamicArray<int> *ret = NULL;
@@ -117,22 +119,117 @@ public:
         } else {
             THROW_EXCEPTION(InvalidParameterException, "Index i is invalid ... ");
         }
+
+        return ret;
     }
     /* 获取边相关的数据元素值 */
-    E getEdge(int i, int j) = 0;
-    bool getEdge(int i, int j, E &value) = 0;
+    E getEdge(int i, int j)
+    {
+        E ret;
+
+        if (!getEdge(i, j, ret)) {
+            THROW_EXCEPTION(InvalidParameterException, "Index <i, j> is invalid ...");
+        }
+
+        return ret;
+    }
+    bool getEdge(int i, int j, E &value)
+    {
+        int ret = ( (0 <= i) && (i < vCount()) &&
+                    (0 <= j) && (j < vCount()) );
+        if (ret) {
+            if (m_edges[i][j] != NULL) {
+                value = *(m_edges[i][j]);
+            } else {
+                THROW_EXCEPTION(InvalidParameterException, "No value assigned to this edge ...");
+            }
+        }
+
+        return ret;
+    }
     /* 设置边相关的数据元素值 */
-    bool setEdge(int i, int j, const E &value) = 0;
+    bool setEdge(int i, int j, const E &value)
+    {
+        int ret = ( (0 <= i) && (i < vCount()) &&
+                    (0 <= j) && (j < vCount()) );
+        if (ret) {
+            E *ne = m_edges[i][j];  // 中间变量
+            if (ne == NULL) {
+                ne = new E();
+                if (ne != NULL) {
+                    *ne = value;
+                    m_edges[i][j] = ne;
+                    m_eCount++;
+                } else {
+                    THROW_EXCEPTION(NoEnoughMemoryException, "No memory to store new edge value ...");
+                }
+            } else {
+                *ne = value;
+            }
+        }
+
+        return ret;
+    }
     /* 删除边 */
-    bool removeEdge(int i, int j) = 0;
+    bool removeEdge(int i, int j)
+    {
+        int ret = ( (0 <= i) && (i < vCount()) &&
+                    (0 <= j) && (j < vCount()) );
+        if (ret) {
+            E *toDel = m_edges[i][j];
+            m_edges[i][j] = NULL;
+            if (toDel != NULL) {
+                m_eCount--;
+                delete toDel;
+            }
+        }
+
+        return ret;
+    }
     /* 获取定点数 */
-    int vCount() = 0;
+    int vCount()
+    {
+        return N;
+    }
     /* 获取边数 */
-    int eCount() = 0;
-    /* 获取出度 */
-    int OD(int i) = 0;
-    /* 获取入度 */
-    int ID(int i) = 0;
+    int eCount()
+    {
+        return m_eCount;
+    }
+    /* 获取出度(矩阵中对应的行，有多少个不为空) */
+    int OD(int i)
+    {
+        int ret = 0;
+
+        if ( (0 <= i) && (i <= vCount()) ) {
+            for (int j = 0; j < vCount(); j++) {
+                if (m_edges[i][j] != NULL){
+                    ret++;
+                }
+            }
+        } else {
+            THROW_EXCEPTION(InvalidParameterException, "Index i is invalid ...");
+        }
+
+        return ret;
+    }
+    /* 获取入度(矩阵中对应的列，有多少个不为空) */
+    int ID(int i)
+    {
+        int ret = 0;
+
+        if ( (0 <= i) && (i <= vCount()) ) {
+            for (int j = 0; j < vCount(); j++) {
+                if (m_edges[j][i] != NULL){
+                    ret++;
+                }
+            }
+        } else {
+            THROW_EXCEPTION(InvalidParameterException, "Index i is invalid ...");
+        }
+
+        return ret;
+    }
 
     ~MatrixGraph()
     {
