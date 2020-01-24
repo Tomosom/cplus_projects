@@ -23,7 +23,9 @@
                 "${workspaceFolder}/pointer/shared_pointer",
                 "${workspaceFolder}/tree",
                 "${workspaceFolder}/tree/gtree",
-                "${workspaceFolder}/tree/btree"
+                "${workspaceFolder}/tree/btree",
+                "${workspaceFolder}/graph",
+                "${workspaceFolder}/graph/matrix_graph"
             ],
             "defines": [
                 "_DEBUG",
