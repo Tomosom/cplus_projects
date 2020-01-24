@@ -6,8 +6,8 @@ a.out
 **/out/
 out/
 
-**/.vscode/
-.vscode/
+#**/.vscode/
+#.vscode/
 
 **/*.o
 *.o
