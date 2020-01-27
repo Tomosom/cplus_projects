@@ -44,12 +44,12 @@ public:
         }
     }
 
-    int addVertex()
+    int addVertex()   // O(n)
     {
         int ret = -1;
         Vertex *v = new Vertex;
         if (v != NULL) {
-            m_list.insert(v);
+            m_list.insert(v);   // O(n)
             ret = m_list.length() - 1; // 插入节点的编号
         } else {
             THROW_EXCEPTION(NoEnoughMemoryException, "No memory to create new vertex object ...");
@@ -58,7 +58,7 @@ public:
         return ret;
     }
 
-    int addVertex(const V &value)
+    int addVertex(const V &value)   // O(n)
     {
         int ret = addVertex();
         if (ret >= 0) {
@@ -68,11 +68,11 @@ public:
         return ret;
     }
 
-    bool setVertex(int i, const V &value)
+    bool setVertex(int i, const V &value)   // O(n)
     {
         int ret = ((0 <= i) && (i <= vCount()));
         if (ret) {
-            Vertex *vertex = m_list.get(i);
+            Vertex *vertex = m_list.get(i);   // O(n)
             V *data = vertex->data;
 
             if (data == NULL) {
@@ -90,7 +90,7 @@ public:
         return ret;
     }
 
-    V getVertex(int i)
+    V getVertex(int i)   // O(n)
     {
         V ret;
         if (!getVertex(i, ret)) {
@@ -99,7 +99,7 @@ public:
         return ret;
     }
 
-    bool getVertex(int i, V &value)
+    bool getVertex(int i, V &value)   // O(n)
     {
         int ret = ((0 <= i) && (i <= vCount()));
         if (ret) {
@@ -114,15 +114,15 @@ public:
         return ret;
     }
     /* 删除最近添加的顶点 */
-    void removeVertex()
+    void removeVertex()   // O(n2)
     {
         if (m_list.length() > 0) {
             int index = m_list.length() - 1;
-            Vertex *v = m_list.get(index);
+            Vertex *v = m_list.get(index);   // O(n)
             if (m_list.remove(index)) {
                 // 其他邻接顶点有无相关的边
-                for (int i = (m_list.move(0), 0); !m_list.end(); i++, m_list.next()) {
-                    int pos = m_list.current()->edge.find(Edge<E>(i, index));
+                for (int i = (m_list.move(0), 0); !m_list.end(); i++, m_list.next()) {   // O(n)
+                    int pos = m_list.current()->edge.find(Edge<E>(i, index));   // O(n)
                     if (pos >= 0) {
                         m_list.current()->edge.remove(pos);
                     }
@@ -136,11 +136,11 @@ public:
     }
 
     /* 获取邻接顶点 */
-    SharedPointer< Array<int> > getAdjacent(int i)
+    SharedPointer< Array<int> > getAdjacent(int i)   // O(n)
     {
         DynamicArray<int> *ret = NULL;
         if ( (0 <= i) && (i < vCount()) ) {
-            Vertex *vertex = m_list.get(i);
+            Vertex *vertex = m_list.get(i);   // O(n)
             ret = new DynamicArray<int>(vertex->edge.length());
             if (ret != NULL) {
                 for (int k = (vertex->edge.move(0), 0); !vertex->edge.end(); k++, vertex->edge.next()) {
@@ -157,7 +157,7 @@ public:
     }
 
     /* 获取边 */
-    E getEdge(int i, int j)
+    E getEdge(int i, int j)   // O(n)
     {
         E ret;
         if (!getEdge(i, j, ret)) {
@@ -166,7 +166,7 @@ public:
         return ret;
     }
 
-    bool getEdge(int i, int j, E &value)
+    bool getEdge(int i, int j, E &value)   // O(n)
     {
         int ret = ( (0 <= i) && (i < vCount()) &&
                     (0 <= j) && (j < vCount()) );
@@ -184,7 +184,7 @@ public:
     }
 
     /* 设置边 */
-    bool setEdge(int i, int j, const E &value)
+    bool setEdge(int i, int j, const E &value)   // O(n)
     {
         int ret = ( (0 <= i) && (i < vCount()) &&
                     (0 <= j) && (j < vCount()) );
@@ -202,7 +202,7 @@ public:
     }
 
     /* 删除边 */
-    bool removeEdge(int i, int j)
+    bool removeEdge(int i, int j)   // O(n)
     {
         int ret = ( (0 <= i) && (i < vCount()) &&
                     (0 <= j) && (j < vCount()) );
@@ -218,14 +218,14 @@ public:
     }
 
     /* 获取顶点数 */
-    int vCount()
+    int vCount()   // O(1)
     {
         return m_list.length();
     }
 
 
     /* 获取边数 */
-    int eCount()
+    int eCount()   // O(n)
     {
         int ret = 0;
 
@@ -235,12 +235,12 @@ public:
         return ret;
     }
     /* 获取出度 */
-    int OD(int i)
+    int OD(int i)   // O(n)
     {
         int ret = 0;
 
         if ( (0 <= i) && (i <= vCount()) ) {
-            ret = m_list.get(i)->edge.length();
+            ret = m_list.get(i)->edge.length();   // O(n)
         } else {
             THROW_EXCEPTION(InvalidParameterException, "Index i is invalid ...");
         }
@@ -248,7 +248,7 @@ public:
         return ret;
     }
     /* 获取入度 */
-    int ID(int i)
+    int ID(int i)   // O(n2)
     {
         int ret = 0;
 

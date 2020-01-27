@@ -52,7 +52,7 @@ public:
     }
 
     /* 获取顶点相关的数据元素值 */
-    V getVertex(int i)
+    V getVertex(int i)  // O(1)
     {
         V ret;
 
@@ -62,7 +62,7 @@ public:
 
         return ret;
     }
-    bool getVertex(int i, V &value)
+    bool getVertex(int i, V &value) // O(1)
     {
         int ret = ((0 <= i) && (i < vCount()));
         if (ret) {
@@ -76,7 +76,7 @@ public:
         return ret;
     }
     /* 设置顶点相关的数据元素值 */
-    bool setVertex(int i, const V &value)
+    bool setVertex(int i, const V &value)   // O(1)
     {
         bool ret = ( (0 <= i) && (i < vCount()) );
         if (ret) {
@@ -95,7 +95,7 @@ public:
         return ret;
     }
     /* 获取邻接顶点(通过邻接矩阵中对应的行，获取邻接顶点的编号) */
-    SharedPointer< Array<int> > getAdjacent(int i)
+    SharedPointer< Array<int> > getAdjacent(int i)  // O(n)
     {
         DynamicArray<int> *ret = NULL;
         if ( (0 <= i) && (i < vCount()) ) {
@@ -123,7 +123,7 @@ public:
         return ret;
     }
     /* 获取边相关的数据元素值 */
-    E getEdge(int i, int j)
+    E getEdge(int i, int j) // O(1)
     {
         E ret;
 
@@ -133,7 +133,7 @@ public:
 
         return ret;
     }
-    bool getEdge(int i, int j, E &value)
+    bool getEdge(int i, int j, E &value)    // O(1)
     {
         int ret = ( (0 <= i) && (i < vCount()) &&
                     (0 <= j) && (j < vCount()) );
@@ -148,7 +148,7 @@ public:
         return ret;
     }
     /* 设置边相关的数据元素值 */
-    bool setEdge(int i, int j, const E &value)
+    bool setEdge(int i, int j, const E &value)  // O(1)
     {
         int ret = ( (0 <= i) && (i < vCount()) &&
                     (0 <= j) && (j < vCount()) );
@@ -171,7 +171,7 @@ public:
         return ret;
     }
     /* 删除边 */
-    bool removeEdge(int i, int j)
+    bool removeEdge(int i, int j)   // O(1)
     {
         int ret = ( (0 <= i) && (i < vCount()) &&
                     (0 <= j) && (j < vCount()) );
@@ -187,17 +187,17 @@ public:
         return ret;
     }
     /* 获取定点数 */
-    int vCount()
+    int vCount()       // O(1)
     {
         return N;
     }
     /* 获取边数 */
-    int eCount()
+    int eCount()   // O(1)
     {
         return m_eCount;
     }
     /* 获取出度(矩阵中对应的行，有多少个不为空) */
-    int OD(int i)
+    int OD(int i)   // O(n)
     {
         int ret = 0;
 
@@ -214,7 +214,7 @@ public:
         return ret;
     }
     /* 获取入度(矩阵中对应的列，有多少个不为空) */
-    int ID(int i)
+    int ID(int i)   // O(n)
     {
         int ret = 0;
 
