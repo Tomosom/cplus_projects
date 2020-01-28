@@ -10,6 +10,8 @@
 #include "object.h"
 #include "shared_pointer.h"
 #include "array.h"
+#include "dynamic_array.h"
+#include "link_queue.h"
 
 namespace DTLib {
 
@@ -46,6 +48,22 @@ struct Edge : public Object {
 
 template <typename V, typename E>
 class Graph : public Object {
+protected:
+    template <typename T>
+    DynamicArray<T> *toArray(LinkQueue<T> &queue)
+    {
+        DynamicArray<T> *ret = new DynamicArray<T>(queue.length());
+        if (ret != NULL) {
+            for (int i = 0; i < ret->length(); i++, queue.remove()) {
+                ret->set(i, queue.front());
+            }
+        } else {
+            THROW_EXCEPTION(NoEnoughMemoryException, "No memory to create ret object ...");
+        }
+
+        return ret;
+    }
+
 public:
     /* 获取顶点相关的数据元素值 */
     virtual V getVertex(int i) = 0;
@@ -74,6 +92,64 @@ public:
     {
         return OD(i) + ID(i);
     }
+
+    /*
+     * BFS : Breadth First Search 广度优先遍历
+     *  以二叉树层次遍历的思想对图进行遍历
+     * 
+     * 广度优先算法
+     *  - 原料 : class LinkQueue<T>;
+     *  - 步骤 :
+     *      1. 将其实定点压入队列中
+     *      2. 队头顶点 v 弹出, 判断是否已经标记 (标记 : 转2, 未标记 : 转3)
+     *      3. 标记顶点 v, 并将顶点v的邻接顶点压入队列中
+     *      4. 判断队列是否为空 (非空 : 转2, 空 : 结束)
+     */
+    SharedPointer< Array<int> > BFS(int i)
+    {
+        DynamicArray<int> *ret = NULL;
+
+        if ( (0 <= i) && (i <= vCount()) ) {
+            LinkQueue<int> q;
+            LinkQueue<int> r;   //  return 队列
+            DynamicArray<bool> visited(vCount());
+
+            for(int i = 0; i < visited.length(); i++) {
+                visited[i] = false;
+            }
+
+            q.add(i);
+
+            while(q.length() > 0) {
+                int v = q.front();
+                q.remove();
+
+                if (!visited[v]) {
+                    SharedPointer< Array<int> > aj = getAdjacent(v);
+
+                    for(int j = 0; j < aj->length(); j++) {
+                        q.add((*aj)[j]);
+                    }
+
+                    r.add(v);
+                    visited[v] = true;
+                }
+            }
+
+            ret = toArray(r);
+        } else {
+            THROW_EXCEPTION(InvalidParameterException, "Index i is invalid ...");
+        }
+
+        return ret;
+    }
+
+    /*
+     * DFS : Depth First Search 深度优先遍历
+     *  以二叉树先序遍历的思想对图进行遍历
+     */
+
+
 };
 
 }

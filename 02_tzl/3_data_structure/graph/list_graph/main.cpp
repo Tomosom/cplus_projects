@@ -6,6 +6,9 @@ using namespace DTLib;
 
 int main(int argc, char **argv)
 {
+#if 0
+    // 邻接链表法基本功能测试
+
     // ListGraph<char, int> g(4);
     // g.setVertex(0, 'A');
     // g.setVertex(1, 'B');
@@ -57,6 +60,55 @@ int main(int argc, char **argv)
     cout << "W(0, 1) : " << g.getEdge(0, 1) << endl;
     cout << "W(1, 2) : " << g.getEdge(1, 2) << endl;
     // cout << "W(2, 3) : " << g.getEdge(2, 3) << endl;
+#endif
+
+#if 1
+    // BFS遍历测试
+    ListGraph<char, int> g;
+    const char *VD = "ABEDCGFHI";
+
+    for (int i = 0; i < 9; i++) {
+        g.addVertex(VD[i]);
+    }
+
+    g.setEdge(0, 1, 0);
+    g.setEdge(1, 0, 0);
+
+    g.setEdge(0, 3, 0);
+    g.setEdge(3, 0, 0);
+
+    g.setEdge(0, 4, 0);
+    g.setEdge(4, 0, 0);
+
+    g.setEdge(1, 2, 0);
+    g.setEdge(2, 1, 0);
+
+    g.setEdge(1, 4, 0);
+    g.setEdge(4, 1, 0);
+
+    g.setEdge(2, 5, 0);
+    g.setEdge(5, 2, 0);
+
+    g.setEdge(3, 6, 0);
+    g.setEdge(6, 3, 0);
+
+    g.setEdge(4, 6, 0);
+    g.setEdge(6, 4, 0);
+
+    g.setEdge(6, 7, 0);
+    g.setEdge(7, 6, 0);
+
+    g.setEdge(7, 8, 0);
+    g.setEdge(8, 7, 0);
+
+    SharedPointer< Array<int> > sa = g.BFS(0);
+    
+    for (int i = 0; i < sa->length(); i++) {
+        cout << (*sa)[i] << " ";
+    }
+    cout << endl;
+#endif
+
     return 0;
 }
 
