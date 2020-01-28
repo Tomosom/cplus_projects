@@ -12,6 +12,7 @@
 #include "array.h"
 #include "dynamic_array.h"
 #include "link_queue.h"
+#include "link_stack.h"
 
 namespace DTLib {
 
@@ -146,11 +147,57 @@ public:
 
     /*
      * DFS : Depth First Search 深度优先遍历
-     *  以二叉树先序遍历的思想对图进行遍历
+     * 
+     * 深度优先算法
+     *  - 原料 : class LinkStack<T>;
+     *  - 步骤 : 
+     *      1. 将起始顶点压入栈中
+     *      2. 弹出栈顶顶点v, 判断是否已经标记( 标记 : 转2, 未标记 : 转3 )
+     *      3. 标记顶点v, 并将顶点v的邻接顶点压入栈中
+     *      4. 判断栈是否为空 ( 非空 : 转2, 空 : 结束 )
      */
+    SharedPointer< Array<int> > DFS(int i)
+    {
+        DynamicArray<int> *ret = NULL;
 
+        if ( (0 <= i) && (i <= vCount()) ) {
+            LinkStack<int> s;
+            LinkQueue<int> r; // return 队列
+            DynamicArray<bool> visited(vCount());
+
+            for (int j = 0; j < visited.length(); j++) {
+                visited[j] = false;
+            }
+
+            s.push(i);
+
+            while(s.size() > 0) {
+                int v = s.top();
+                s.pop();
+                if (!visited[v]) {
+                    SharedPointer< Array<int> > aj = getAdjacent(v);
+                    for(int j = aj->length() - 1; j >= 0; j--) {
+                        s.push((*aj)[j]);
+                    }
+
+                    r.add(v);
+                    visited[v] = true;
+                }
+            }
+
+            ret = toArray(r);
+
+        } else {
+            THROW_EXCEPTION(InvalidParameterException, "index i is invalid ...");
+        }
+
+        return ret;
+    }
 
 };
+
+
+
 
 }
 
