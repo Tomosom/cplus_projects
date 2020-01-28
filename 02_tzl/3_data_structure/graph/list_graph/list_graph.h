@@ -25,7 +25,7 @@ class ListGraph : public Graph<V, E> {
     // 顶点相关的数据类型
     struct Vertex : public Object{
         V *data;
-        LinkList<Edge<E>> edge;
+        LinkList< Edge<E> > edge;
 
         Vertex()
         {
@@ -254,7 +254,7 @@ public:
 
         if ( (0 <= i) && (i <= vCount()) ) {
             for (m_list.move(0); !m_list.end(); m_list.next()) {
-                LinkList<Edge<E>> &edge = m_list.current()->edge;
+                LinkList< Edge<E> > &edge = m_list.current()->edge;
                 for (edge.move(0); !edge.end(); edge.next()) {
                     if (edge.current().e == i) {
                         ret++;

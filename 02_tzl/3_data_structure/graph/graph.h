@@ -115,8 +115,8 @@ public:
             LinkQueue<int> r;   //  return 队列
             DynamicArray<bool> visited(vCount());
 
-            for(int i = 0; i < visited.length(); i++) {
-                visited[i] = false;
+            for(int j = 0; j < visited.length(); j++) {
+                visited[j] = false;
             }
 
             q.add(i);
