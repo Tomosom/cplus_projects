@@ -73,6 +73,10 @@ public:
     virtual bool setVertex(int i, const V &value) = 0;
     /* 获取邻接顶点 */
     virtual SharedPointer< Array<int> > getAdjacent(int i) = 0;
+
+    /* 判断在当前图中顶点i到顶点j是否邻接 */
+    virtual bool isAdjacent(int i, int j) = 0;
+
     /* 获取边相关的数据元素值 */
     virtual E getEdge(int i, int j) = 0;
     virtual bool getEdge(int i, int j, E &value) = 0;
@@ -92,6 +96,108 @@ public:
     virtual int TD(int i)
     {
         return OD(i) + ID(i);
+    }
+
+    /* 判断当前的有向图是否能够看做无向图 */
+    bool asUndirected()
+    {
+        bool ret = true;
+        for (int i = 0; i < vCount(); i++) {
+            for (int j = 0; j < vCount(); j++) {
+                if (isAdjacent(i, j)) {
+                    ret = ret && isAdjacent(j, i) && (getEdge(i, j) == getEdge(j, i));
+                }
+            }
+        }
+        return ret;
+    }
+
+    /* 
+     * 最小生成树定义
+     *  - 仅适用图中的 n - 1 条边连接图中的 n 个顶点
+     *  - 不能使用产生回路的边
+     *  - 各边上的权值的总和达到最小
+     * 
+     * Prim 算法概览
+     * 普里姆算法（Prim算法），图论中的一种算法，可在加权连通图里搜索最小生成树。
+     * 意即由此算法搜索到的边子集所构成的树中，不但包括了连通图里的所有顶点(英
+     * 语：Vertex (graph theory))，且其所有边的权值之和亦为最小。该算法于1930年
+     * 由捷克数学家沃伊捷赫·亚尔尼克（英语：Vojtěch Jarník）发现；并在1957年由
+     * 美国计算机科学家罗伯特·普里姆（英语：Robert C. Prim）独立发现；1959年，
+     * 艾兹格·迪科斯彻再次发现了该算法。因此，在某些场合，普里姆算法又被称为DJP算法、
+     * 亚尔尼克算法或普里姆－亚尔尼克算法。
+     * 
+     * prim 算法简单描述(通过顶点的动态标记)
+     *  1. 选择某一顶点V0作为起始顶点, 使得 T = { v0 }, F = { v1,v2,v3,...vn }, E = { }
+     *  2. 每次选择一条边,这条边是所有(u, v)中权值最小的边,且 u∈T, v∈F
+     *  3. 修改T, F, E
+     *          T = T + { v }, F = F - { v }, E = E + { (U, V) }
+     *  4. 当 F != NULL 时, 且(u, v)存在, 转2; 否则, 结束
+     */
+    SharedPointer< Array< Edge<E> > > prim(const E &LIMIT, const bool MINIMUM = true)
+    {
+        LinkQueue< Edge<E> > ret;
+        if (asUndirected()) {
+            DynamicArray<int> adjVex(vCount());
+            DynamicArray<bool> mark(vCount());
+            DynamicArray<E> cost(vCount());
+            SharedPointer< Array<int> > aj = NULL; // 保存邻接顶点数组
+            bool end = false; // flag
+            int v = 0; // 习惯性地从0顶点开始寻找最小生成树
+
+            for (int i = 0; i < vCount(); i++) {
+                adjVex[i] = -1;
+                mark[i] = false;
+                cost[i] = LIMIT; // 理论上的最大权值
+            }
+
+            mark[v] = true;
+
+            aj = getAdjacent(v);
+
+            for (int j = 0; j < aj->length(); j++) {
+                cost[(*aj)[j]] = getEdge(v, (*aj)[j]);
+                adjVex[(*aj)[j]] = v;
+            }
+
+            for (int i = 0; (i < vCount()) && !end; i++) {
+                E m = LIMIT;
+                int k = -1;
+
+                for (int j = 0; j < vCount(); j++) {
+                    if (!mark[j] && (MINIMUM ? (cost[j] < m) : (cost[j] > m))) {
+                        m = cost[j];
+                        k = j;
+                    }
+                }
+
+                end = (k == -1);
+
+                if ( !end ) {
+                    ret.add(Edge<E>(adjVex[k], k, getEdge(adjVex[k], k)));
+
+                    mark[k] = true;
+                    aj = getAdjacent(k);
+                    for (int j = 0;j < aj->length(); j++) {
+                        if ( !mark[(*aj)[j]] &&
+                             (MINIMUM ? (getEdge(k, (*aj)[j]) < cost[(*aj)[j]]) :
+                                        (getEdge(k, (*aj)[j]) > cost[(*aj)[j]])) ) {
+                            cost[(*aj)[j]] = getEdge(k, (*aj)[j]);
+                            adjVex[(*aj)[j]] = k;
+                        }
+                    }
+                }
+            }
+
+        } else {
+            THROW_EXCEPTION(IndexOutOfBoundsException, "Prim operation is for undirected graph only ...");
+        }
+
+        if (ret.length() != (vCount() - 1)) {
+            THROW_EXCEPTION(IndexOutOfBoundsException, "No enough edges for prim operation ...");
+        }
+
+        return toArray(ret);
     }
 
     /*

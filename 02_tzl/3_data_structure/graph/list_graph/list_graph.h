@@ -156,6 +156,14 @@ public:
         return ret;
     }
 
+    /* 判断在当前图中顶点i到顶点j是否邻接 */
+    bool isAdjacent(int i, int j)
+    {
+        return (0 <= i) && (i < vCount()) &&
+               (0 <= j) && (j < vCount()) && 
+               (m_list.get(i)->edge.find(Edge<E>(i, j)) >= 0); // 对应的边是否存在
+    }
+
     /* 获取边 */
     E getEdge(int i, int j)   // O(n)
     {
