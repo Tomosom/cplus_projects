@@ -86,9 +86,10 @@ int main(int argc, char **argv)
     Graph<int, int> &g = GraphComplex<int, int>();
     //Graph<int, int> &g = GraphEasy<int, int>();
 
-    SharedPointer< Array< Edge<int> > > sa = g.prim(0, false);
+    //SharedPointer< Array< Edge<int> > > sa = g.prim(0, false);
     //SharedPointer< Array< Edge<int> > > sa = g.prim(65536);
-
+    //SharedPointer< Array< Edge<int> > > sa = g.Kruskal();
+    SharedPointer< Array< Edge<int> > > sa = g.Kruskal(false);
     int w = 0;
 
     for(int i=0; i<sa->length(); i++)

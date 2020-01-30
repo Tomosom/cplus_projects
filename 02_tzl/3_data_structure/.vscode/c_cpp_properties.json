@@ -21,6 +21,7 @@
                 "${workspaceFolder}/stack_and_queue/stack/static_stack",
                 "${workspaceFolder}/pointer",
                 "${workspaceFolder}/pointer/shared_pointer",
+                "${workspaceFolder}/sort",
                 "${workspaceFolder}/tree",
                 "${workspaceFolder}/tree/gtree",
                 "${workspaceFolder}/tree/btree",

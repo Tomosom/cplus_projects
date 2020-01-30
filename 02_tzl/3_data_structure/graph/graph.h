@@ -13,15 +13,16 @@
 #include "dynamic_array.h"
 #include "link_queue.h"
 #include "link_stack.h"
+#include "sort.h"
 
 namespace DTLib {
 
 // 边相关的数据类型
 template <typename E>
 struct Edge : public Object {
-    int b;
-    int e;
-    E data;
+    int b;  // 起点 begin vertex
+    int e;  // 终点 end vertex
+    E data; // 权值
 
     Edge(int i = -1, int j = -1)
     {
@@ -45,6 +46,15 @@ struct Edge : public Object {
     {
         return !(*this == obj);
     }
+
+    bool operator < (const Edge<E> &obj)
+    {
+        return (data < obj.data);
+    }
+    bool operator > (const Edge<E> &obj)
+    {
+        return (data > obj.data);
+    }
 };
 
 template <typename V, typename E>
@@ -63,6 +73,37 @@ protected:
         }
 
         return ret;
+    }
+
+    // 拿到图中所有的边
+    SharedPointer< Array< Edge<E> > > getUndirectedEdges()
+    {
+        DynamicArray< Edge<E> > *ret = NULL;
+
+        if (asUndirected()) {
+            LinkQueue< Edge<E> > queue;
+
+            for (int i = 0; i < vCount(); i++) {
+                for (int j = i; j < vCount(); j++) {
+                    if (isAdjacent(i, j)) {
+                        queue.add(Edge<E>(i, j, getEdge(i, j)));
+                    }
+                }
+            }
+
+            ret = toArray(queue);
+        } else {
+            THROW_EXCEPTION(InvalidParameterException, "This function is for undirected graph only ...");
+        }
+        return ret;
+    }
+
+    int find(Array<int> &p, int v)
+    {
+        while(p[v] != -1) {
+            v = p[v];
+        }
+        return v;
     }
 
 public:
@@ -127,7 +168,7 @@ public:
      * 艾兹格·迪科斯彻再次发现了该算法。因此，在某些场合，普里姆算法又被称为DJP算法、
      * 亚尔尼克算法或普里姆－亚尔尼克算法。
      * 
-     * prim 算法简单描述(通过顶点的动态标记)
+     * prim 算法步骤(通过顶点的动态标记)
      *  1. 选择某一顶点V0作为起始顶点, 使得 T = { v0 }, F = { v1,v2,v3,...vn }, E = { }
      *  2. 每次选择一条边,这条边是所有(u, v)中权值最小的边,且 u∈T, v∈F
      *  3. 修改T, F, E
@@ -199,6 +240,59 @@ public:
 
         return toArray(ret);
     }
+
+    /* 
+     * 最小生成树定义
+     *  - 仅适用图中的 n - 1 条边连接图中的 n 个顶点
+     *  - 不能使用产生回路的边
+     *  - 各边上的权值的总和达到最小
+     * 
+     * Kruskal 算法概览
+     * Kruskal算法是一种用来寻找最小生成树的算法，由Joseph Kruskal在1956年发表。
+     * 用来解决同样问题的还有Prim算法和Boruvka算法等。三种算法都是贪婪算法的应用。
+     * 和Boruvka算法不同的地方是，Kruskal算法在图中存在相同权值的边时也有效。
+     * 
+     * 需解决的问题 : 如何判断新选择的边与已选择的边是否构成回路
+     * 技巧:前驱标记数组
+     *  - 定义数组:Array<int> p(vCount());
+     *  - 数组元素的意义:
+     *      p[n] 标识顶点 n 在边的连接通路上的另一端顶点
+     * 
+     * Kruskal 算法步骤(以边为核心)
+     *  1. 定义前驱标记数组: Array<int> p(vCount());
+     *  2. 获取当前图中的所有边,并存储于edges数组中
+     *  3. 对数组edges按照权值进行排序
+     *  4. 利用 p 数组在edges数组中选择前 n-1 不构成回路的边 
+     */
+    SharedPointer< Array< Edge<E> > > Kruskal(const bool MINIMUM = true)
+    {
+        LinkQueue< Edge<E> > ret;
+        SharedPointer< Array< Edge<E> > > edges = getUndirectedEdges();
+        DynamicArray<int> p(vCount());
+        for (int i = 0; i < p.length(); i++) {
+            p[i] = -1;
+        }
+
+        Sort::Shell_from_insert(*edges, MINIMUM);
+
+        for(int i = 0; (i < edges->length()) && (ret.length() < (vCount() - 1)); i++) {
+            int b = find(p, (*edges)[i].b);
+            int e = find(p, (*edges)[i].e);
+
+            if (b != e) {
+                p[e] = b;
+                ret.add((*edges)[i]);
+            }
+        }
+
+        if (ret.length() != (vCount() - 1)) {
+            THROW_EXCEPTION(InvalidOperationException, "No enough edges for Kruskal operation ...");
+        }
+
+        return toArray(ret);
+    }
+
+
 
     /*
      * BFS : Breadth First Search 广度优先遍历
