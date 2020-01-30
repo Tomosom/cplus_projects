@@ -292,8 +292,6 @@ public:
         return toArray(ret);
     }
 
-
-
     /*
      * BFS : Breadth First Search 广度优先遍历
      *  以二叉树层次遍历的思想对图进行遍历
@@ -394,6 +392,88 @@ public:
         return ret;
     }
 
+    /*
+     * 最短路径
+     * Dijkstras算法概述
+     * 迪杰斯特拉算法(Dijkstra)是由荷兰计算机科学家狄克斯特拉于1959 年提出的，
+     * 因此又叫狄克斯特拉算法。是从一个顶点到其余各顶点的最短路径算法，解决的
+     * 是有权图中最短路径问题。迪杰斯特拉算法主要特点是以起始点为中心向外层层
+     * 扩展，直到扩展到终点为止。
+     * 
+     * Dijkstras算法步骤 ( 基于递推思想完成的 )
+     * 1. 初始化: S ← { v0 }
+     *      dist[j] ← Edge[0][j], j = 1, 2, ..., n - 1;
+     * 2. 找出最小路径值所对应的顶点K;
+     *      dist[k] == min { dist[i] }, i ∈ V - S;
+     *      S ← S U { K };  // 标记k顶点进入 S 集合
+     * 3. 对于每一个 i ∈ V - S 修改:
+     *      dist[i] ← min { dist[i], dist[k] + Edge[k][i] }
+     * 4. 判断: 若 S == V , 则算法结束,否则转2
+     */
+    SharedPointer< Array<int> > dijkstra(int i, int j, const E &LIMIT)
+    {
+        LinkQueue<int> ret;
+
+        if ((0 <= i) && (i < vCount()) && (0 <= j) && (j < vCount())) {
+            DynamicArray<E> dist(vCount());
+            DynamicArray<int> path(vCount());
+            DynamicArray<bool> mark(vCount());
+
+            for (int k = 0; k < vCount(); k++) {
+                mark[k] = false;
+                path[k] = -1;
+
+                dist[k] = isAdjacent(i, k) ? (path[k] = i, getEdge(i, k)) : LIMIT;
+            }
+
+            mark[i] = true;
+
+            for(int k = 0; k < vCount(); k++) {
+                E m = LIMIT;
+                int u = -1;
+
+                for (int w = 0; w < vCount(); w++) {
+                    if (!mark[w] && (dist[w] < m)) {
+                        m = dist[w];
+                        u = w;
+                    }
+                }
+
+                if (u == -1) {
+                    break;
+                }
+
+                mark[u] = true;
+
+                for (int w = 0; w < vCount(); w++) {
+                    if ( !mark[w] && isAdjacent(u, w) && (dist[u] + getEdge(u, w) < dist[w]) ) {
+                        dist[w] = dist[u] + getEdge(u, w);
+                        path[w] = u;
+                    }
+                }
+            }
+
+            LinkStack<int> s;
+            s.push(j);
+            for (int k = path[j]; k != -1; k = path[k]) {
+                s.push(k);
+            }
+
+            while(s.size() > 0) {
+                ret.add(s.top());
+                s.pop();
+            }
+
+        } else {
+            THROW_EXCEPTION(InvalidParameterException, "Index <i, j> is invalid ...");
+        }
+
+        if(ret.length() < 2) {
+            THROW_EXCEPTION(ArithmetricException, "There is no path from i to j ...");
+        }
+
+        return toArray(ret);
+    }
 };
 
 
