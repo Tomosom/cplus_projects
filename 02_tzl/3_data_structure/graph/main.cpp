@@ -145,8 +145,27 @@ Graph<V, E>& GraphComplex()
     return g;
 }
 
+template< typename V, typename E >
+Graph<V, E>& GraphSample()
+{
+    static ListGraph<V, E> g(3);
+
+    g.setEdge(0, 1, 4);
+    g.setEdge(0, 2, 11);
+
+    g.setEdge(1, 2, 2);
+    g.setEdge(1, 0, 6);
+
+    g.setEdge(2, 0, 3);
+
+    return g;
+}
+
 int main()
 {
+#if 0
+    // dijkstra 算法
+
     Graph<int, int> &g = GraphComplex<int, int>();
     //Graph<int, int> &g = GraphEasy<int, int>();
     //SharedPointer< Array<int> > p = g.dijkstra(0, 3, 65535);
@@ -158,6 +177,34 @@ int main()
     }
 
     cout << endl;
+#else
+    // floyd 算法
+#if 0
+    // 仅打印值
+    Graph<int, int> &g = GraphSample<int, int>();
+    //int r = g.floyd(0, 2, 65535);
+    //cout << r << endl;
+
+    for (int i  = 0; i < g.vCount(); i++) {
+        for (int j  = 0; j < g.vCount(); j++) {
+            cout << g.floyd(i, j, 65535) << " ";
+        }
+        cout << endl;
+    }
+    
+#else
+    // 打印路径
+    Graph<int, int> &g = GraphSample<int, int>();
+    SharedPointer< Array<int> > r = g.floyd(0, 2, 65535);
+
+    for (int i  = 0; i < r->length(); i++) {
+        cout << (*r)[i] << " ";
+    }
+    cout << endl;
+#endif
+
+#endif
+
 
     return 0;
 }

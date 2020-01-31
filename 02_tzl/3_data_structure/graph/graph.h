@@ -293,6 +293,7 @@ public:
     }
 
     /*
+     * 图遍历
      * BFS : Breadth First Search 广度优先遍历
      *  以二叉树层次遍历的思想对图进行遍历
      * 
@@ -344,6 +345,7 @@ public:
     }
 
     /*
+     * 图遍历
      * DFS : Depth First Search 深度优先遍历
      * 
      * 深度优先算法
@@ -474,12 +476,134 @@ public:
 
         return toArray(ret);
     }
+
+    /*
+     * 最短路径
+     * Floyd算法概述 ( https://baike.baidu.com/item/Floyd算法/291990 )
+     * Floyd算法又称为插点法，是一种利用动态规划的思想寻找给定的加权图中多源点之间最
+     * 短路径的算法，与Dijkstra算法类似。该算法名称以创始人之一、1978年图灵奖获得者、
+     * 斯坦福大学计算机科学系教授罗伯特·弗洛伊德命名。
+     * 
+     * Floyd算法核心
+     *  - 定义一个n阶方阵序列:
+     *      A(-1), A(0), ..., A(n-1)
+     *  - 其中:
+     *      A(-1)[i][j] = Edge[i][j]    //邻接矩阵
+     *      A(k)[i][j] = min { A(k-1)[i][j], A(k-1)[i][k] + A(k-1)[k][j] }  , k = 0, 1, ..., n-1 
+     * 
+     * Floyd算法说明
+     *  - A(-1)定义为邻接矩阵, 则:
+     *      A(0), ..., A(n-1) 通过中转顶点逐一递推得到
+     *  - A(k)矩阵中元素的更新:
+     *      A(k)[i][j] = min { A(k-1)[i][j], A(k-1)[i][k] + A(k-1)[k][j] }
+     *  - A矩阵的推导就是最短路径的推导
+     *      A[i][j]为i到j额路径值, 在推导过程中逐步减小
+     * 
+     * 问题点 : 如何记录最短路径上的各个顶点?
+     *  定义辅助矩阵:
+     *  - int path[N][N];   // 路径矩阵
+     *      - path[i][j]标识i到j的路径上所经过的第1个顶点
+     *      - 初始化:path[i][j] = -1(无直接的边连接); or path[i][j] = j;(有直接的边连接,直接为终点)
+     *      - 修改:
+     *          if ( (dist[i][k] + dist[k][j]) < dist[i][j] ) {
+     *              dist[i][j] = dist[i][k] + dist[k][j];
+     *              path[i][j] = path[i][k];    // 新增
+     *          }
+     */
+
+#if 0
+    // 仅能返回最短路径值,不能返回最短路径
+    int floyd(int x, int y, const E &LIMIT)
+    {
+        int ret = -1;
+
+        if ( (0 <= x) && (x < vCount()) && (0 <= y) && (y < vCount()) ) {
+            DynamicArray< DynamicArray<E> > dist(vCount()); // 定义二维数组
+
+            for (int k = 0; k < vCount(); k++) {
+                dist[k].resize(vCount());
+            }
+
+            // 创建A(-1)方阵
+            for (int i = 0; i < vCount(); i++) {
+                for (int j = 0; j < vCount(); j++) {
+                    dist[i][j] =  isAdjacent(i, j) ? getEdge(i, j) : LIMIT;
+                }
+            }
+
+            for (int k = 0; k < vCount(); k++) {
+                for (int i = 0; i < vCount(); i++) {
+                    for (int j = 0; j < vCount(); j++) {
+                        if ( (dist[i][k] + dist[k][j]) < dist[i][j] ) {
+                            dist[i][j] = dist[i][k] + dist[k][j];
+                        }
+                    }
+                }
+            }
+
+            ret = dist[x][y];
+        } else {
+            THROW_EXCEPTION(InvalidParameterException, "Index <i, j> is invalid ...");
+        }
+
+        return ret;
+    }
+#else
+    // 可返回路径
+    SharedPointer< Array<int> > floyd(int x, int y, const E &LIMIT)
+    {
+        LinkQueue<int> ret;
+
+        if ( (0 <= x) && (x < vCount()) && (0 <= y) && (y < vCount()) ) {
+            DynamicArray< DynamicArray<E> > dist(vCount()); // 定义二维数组
+            DynamicArray< DynamicArray<int> > path(vCount());
+
+            for (int k = 0; k < vCount(); k++) {
+                dist[k].resize(vCount());
+                path[k].resize(vCount());
+            }
+
+            // 创建A(-1)方阵
+            for (int i = 0; i < vCount(); i++) {
+                for (int j = 0; j < vCount(); j++) {
+                    path[i][j] = -1;
+                    dist[i][j] =  isAdjacent(i, j) ? (path[i][j] = j, getEdge(i, j)) : LIMIT; // 逗号表达式可提高效率
+                }
+            }
+
+            for (int k = 0; k < vCount(); k++) {
+                for (int i = 0; i < vCount(); i++) {
+                    for (int j = 0; j < vCount(); j++) {
+                        if ( (dist[i][k] + dist[k][j]) < dist[i][j] ) {
+                            dist[i][j] = dist[i][k] + dist[k][j];
+                            path[i][j] = path[i][k];
+                        }
+                    }
+                }
+            }
+
+            while((x != -1) && (x != y)) {
+                ret.add(x);
+                x = path[x][y];
+            }
+
+            if (x != -1) {
+                ret.add(x);
+            }
+
+        } else {
+            THROW_EXCEPTION(InvalidParameterException, "Index <i, j> is invalid ...");
+        }
+
+        if(ret.length() < 2) {
+            THROW_EXCEPTION(ArithmetricException, "There is no path from i to j ...");
+        }
+
+        return toArray(ret);
+    }
+#endif
 };
 
-
-
-
 }
-
 
 #endif
