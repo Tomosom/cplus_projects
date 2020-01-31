@@ -22,6 +22,7 @@ SUBDIRS = ./array/static_array \
           ./graph \
           ./graph/matrix_graph \
           ./graph/list_graph \
+          ./graph/1_最长不下降序列问题 \
 
 MAKEFLAGS = --no-print-directory
 
