@@ -59,3 +59,5 @@ git push -u origin master
 192.30.253.118 gist.github.com
 192.30.253.119 gist.github.com
 Linux下路径：/etc/hosts
+
+test
